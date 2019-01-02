@@ -22,15 +22,24 @@ namespace BlockIndicate
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Thread doThis = new Thread(delegate ()
+            //Thread binance = new Thread(delegate ()
+            //{
+            //    using (var db = new ApplicationDbContext())
+            //    {
+            //        DataCollection dataCollection = new DataCollection(db);
+            //        dataCollection.InsertData(DateTime.Now.AddMinutes(2));
+            //    }
+            //});
+            //binance.Start();
+            Thread bittrex = new Thread(delegate ()
             {
                 using (var db = new ApplicationDbContext())
                 {
-                    DataCollection dataCollection = new DataCollection(db);
-                    dataCollection.InsertData(DateTime.Now.AddMinutes(1));
+                    BittrexDataCollection bittrexDataCollection = new BittrexDataCollection(db);
+                    bittrexDataCollection.RunCollection(DateTime.Now.AddMinutes(1));
                 }
             });
-            doThis.Start();
+            bittrex.Start();
 
         }
 
