@@ -1,0 +1,85 @@
+﻿@model BlockIndicate.Models.Customer
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Customer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BinanceApiKey)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BinanceApiKey)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BinanceApiSecret)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BinanceApiSecret)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BittrexApiKey)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BittrexApiKey)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BittrexApiSecret)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BittrexApiSecret)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountActive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AccountActive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountTrial)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AccountTrial)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TrialStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TrialStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PaidStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaidStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.FirstName">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
