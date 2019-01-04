@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sample</title>
+
+    <link rel="stylesheet" href="~/lib/simple-sidebar/css/simple-sidebar.css">
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet"
+              href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-
+              property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-
+              version="true" />
+    </environment>
+    <style>
+        #wrapper #sidebar-wrapper {
+            width: 50px;
+        }
+
+        #wrapper .sidebar-nav {
+            display: none;
+        }
+
+        #wrapper.toggled .sidebar-nav {
+            display: block;
+        }
+
+        a#menu-toggle {
+            display: inline-block;
+            width: 100%;
+            line-height: 100%;
+            padding: 0;
+            margin: 0;
+            color: dodgerblue;
+        }
+
+        .cn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    @*------- Top Bar --------*@
+    @*<div style="background-color:#F2F2F2; height:5em; position: absolute; top:0; right:0; left:0; float:right">
+
+        </div>*@
+    @*------- Side Bar --------*@
+    <div id="wrapper" class="toggled">
+        <div id="sidebar-wrapper" style="position: fixed; top:0">
+            @*<a id="menu-toggle" href="#menu-toggle" class="btn btn-secondary">三</a>*@
+
+            <ul class="sidebar-nav" style="margin-top:0.3em;">
+                @*<li class="sidebar-brand">*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="https://cdn.worldvectorlogo.com/logos/titanium-blockchain.svg" style="height:50px; width:50px; margin-left:1em" />
+                    </div>
+                    <div class="col-md-8" style="padding:0px;">
+                        <div style="float:left">
+                            <h3 class="cn">Block Indicate</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <li class="sidebar-brand"><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                <li class="sidebar-brand">
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <div style="float:right; padding:0px">
+                                <img src="https://i.imgur.com/dOoHk3j.png" style="height:35px; width:35px" />
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding:0px">
+                            <div style="float:left; padding:0px">
+                                <a asp-area="" asp-controller="TradingBot" asp-action="Index">Trading Bot</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar-brand"><a asp-area="" asp-controller="Exchanges" asp-action="Create">Exchanges</a></li>
+                <li class="sidebar-brand"><a asp-area="" asp-controller="Doji" asp-action="Index">Doji Finder</a></li>
+            </ul>
+
+        </div>
+
+        <div>
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <footer></footer>
+        </div>
+    </div>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn &&
+     window.jQuery.fn.modal"
+                crossorigin="anonymous">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+    <script>
+        $(document).ready(function () {
+            $("#menu-toggle").click(function (e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
