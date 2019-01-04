@@ -16,8 +16,8 @@ namespace Block_Indicate.Class
     public static class ExchangeApiKeys
     {
 
-        public static bool BinanceConnection;
-        public static bool HuobiConnection;
+        public static bool? BinanceConnection;
+        public static bool? HuobiConnection;
         public static string BinanceApiKey;
         public static string BinanceApiSecret;
         public static string HuobiApiKey;
@@ -28,15 +28,15 @@ namespace Block_Indicate.Class
         {
             ApplicationDbContext db;
             db = context;
-            bool? binanceConnection = db.Customers.Where(c => c.UserId == userId).Select(c => c.ConnectedBinance).Single();
-            bool? huobiConnection = db.Customers.Where(c => c.UserId == userId).Select(c => c.ConnectedHuobi).Single();
-            if (binanceConnection == true)
+            BinanceConnection = db.Customers.Where(c => c.UserId == userId).Select(c => c.ConnectedBinance).Single();
+            HuobiConnection = db.Customers.Where(c => c.UserId == userId).Select(c => c.ConnectedHuobi).Single();
+            if (BinanceConnection == true)
             {
                 BinanceApiKey = db.Customers.Where(c => c.UserId == userId).Select(c => c.BinanceApiKey).Single();
                 BinanceApiSecret = db.Customers.Where(c => c.UserId == userId).Select(c => c.BinanceApiSecret).Single();
                 activeExchanges.Add("Binance");
             }
-            if (huobiConnection == true)
+            if (HuobiConnection == true)
             {
                 HuobiApiKey = db.Customers.Where(c => c.UserId == userId).Select(c => c.HuobiApiKey).Single();
                 HuobiApiSecret = db.Customers.Where(c => c.UserId == userId).Select(c => c.HuobiApiSecret).Single();
@@ -97,13 +97,13 @@ namespace Block_Indicate.Class
             }
         }
 
-        public static Dictionary<string, decimal> GetAccountBalances(string apiKey, string apiSecrect, string exchange)
+        public static Dictionary<string, decimal> GetAccountBalances(string exchange)
         {
             if (exchange == "Binance")
             {
                 BinanceClient.SetDefaultOptions(new BinanceClientOptions()
                 {
-                    ApiCredentials = new ApiCredentials(apiKey, apiSecrect),
+                    ApiCredentials = new ApiCredentials(BinanceApiKey, BinanceApiSecret),
                     LogVerbosity = LogVerbosity.Debug,
                     LogWriters = new List<TextWriter> { Console.Out }
                 });
@@ -129,7 +129,7 @@ namespace Block_Indicate.Class
             {
                 using (var client = new HuobiClient())
                 {
-                    client.SetApiCredentials(apiKey, apiSecrect);
+                    client.SetApiCredentials(HuobiApiKey, HuobiApiSecret);
                     var accounts = client.GetAccounts();
                     var balances = client.GetBalances(accounts.Data[0].Id).Data;
                     if (accounts.Success)

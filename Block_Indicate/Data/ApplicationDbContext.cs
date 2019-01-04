@@ -11,8 +11,19 @@ namespace Block_Indicate.Data
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<FourHourDoji> FourHourDojis { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
+        {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-Block_Indicate-EDDD8D4E-C699-40FD-8558-960B75DAC603;Trusted_Connection=True;MultipleActiveResultSets=true");
+        }
+
+        public ApplicationDbContext()
+            : base()
         {
         }
     }

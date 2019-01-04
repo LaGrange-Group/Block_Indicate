@@ -22,6 +22,8 @@ namespace Block_Indicate.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             DashboardViewModel dashboard = new DashboardViewModel();
+            dashboard.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
+            dashboard.HuobiBalances = ExchangeApiKeys.HuobiConnection == true ? ExchangeApiKeys.GetAccountBalances("Huobi") : null;
             dashboard.CurrentPrices = NavPrice.currentPrices;
             return View(dashboard);
         }
