@@ -1,0 +1,26 @@
+﻿@model BlockIndicate.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+ @*position: absolute; top:0; right:0; left:0; float:right*@
+<div style="background-color:#F2F2F2; height:5em; position: absolute; top:0; right:0; left:17.8em;">
+    <div class="row">
+        <div class="col-md-3" style="height:10px">
+
+        </div>
+        <div class="col-md-3" style="height:10px">
+
+        </div>
+        <div class="col-md-3" style=" height:10px">
+            <div style="margin-left:2em; margin-top:0.5em">
+                <span><strong style="font-size:2.5em;">BTC</strong><span style="font-size:2em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:2em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["btc"])</strong></span></span>
+            </div>
+        </div>
+        <div class="col-md-3" style="height:10px">
+            <div style="margin-left:2em; margin-top:0.5em">
+                <span style=" vertical-align:middle"><strong style="font-size:2.5em;">ETH</strong><span style="font-size:2em"> / </span><span style="font-size:1.5em">Etherium</span><span style="font-size:2em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
+            </div>
+        </div>
+    </div>
+</div>
+<h2 style="top:0">Dashboard</h2>

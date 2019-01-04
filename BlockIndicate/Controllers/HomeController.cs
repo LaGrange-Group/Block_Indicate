@@ -28,7 +28,7 @@ namespace BlockIndicate.Controllers
         {
             ViewData["Message"] = "Your application description page.";
 
-            return RedirectToAction("RetrieveData");
+            return RedirectToAction("SideBar");
         }
         public IActionResult RetrieveData()
         {
@@ -46,7 +46,10 @@ namespace BlockIndicate.Controllers
 
             return View();
         }
-
+        public IActionResult SideBar()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

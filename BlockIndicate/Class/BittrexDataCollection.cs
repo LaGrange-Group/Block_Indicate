@@ -53,8 +53,8 @@ namespace BlockIndicate.Class
                     bittrex.PercentageChange = Decimal.Round(((result.Last - result.PrevDay) / result.PrevDay * 100).Value, 2);
                     bittrex.RealTime = currentTime;
                 }
-                db.BittrexData.Add(bittrex);
-                db.SaveChanges();
+                //db.BittrexData.Add(bittrex);
+                //db.SaveChanges();
             }
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;

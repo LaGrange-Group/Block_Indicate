@@ -26,21 +26,27 @@ namespace BlockIndicate
             //{
             //    using (var db = new ApplicationDbContext())
             //    {
-            //        DataCollection dataCollection = new DataCollection(db);
-            //        dataCollection.InsertData(DateTime.Now.AddMinutes(2));
+            //        BinanceDataCollection dataCollection = new BinanceDataCollection(db);
+            //        dataCollection.RunCollection(DateTime.Now.AddMinutes(5));
             //    }
             //});
             //binance.Start();
-            Thread bittrex = new Thread(delegate ()
-            {
-                using (var db = new ApplicationDbContext())
-                {
-                    BittrexDataCollection bittrexDataCollection = new BittrexDataCollection(db);
-                    bittrexDataCollection.RunCollection(DateTime.Now.AddMinutes(1));
-                }
-            });
-            bittrex.Start();
 
+            //Thread huobi = new Thread(delegate ()
+            //{
+            //    using (var db = new ApplicationDbContext())
+            //    {
+            //        HuobiDataCollection huobiDataCollection = new HuobiDataCollection(db);
+            //        huobiDataCollection.RunCollection(DateTime.Now.AddMinutes(5));
+            //    }
+            //});
+            //huobi.Start();
+
+            Thread CurrentPrices = new Thread(delegate ()
+            {
+                NavPrice.CurrentPrices(DateTime.Now.AddMinutes(5));
+            });
+            CurrentPrices.Start();
         }
 
         public IConfiguration Configuration { get; }

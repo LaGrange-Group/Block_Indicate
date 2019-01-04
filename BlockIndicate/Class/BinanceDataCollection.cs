@@ -10,21 +10,21 @@ using System.Linq;
 
 namespace BlockIndicate.Class
 {
-    public class DataCollection : Controller
+    public class BinanceDataCollection : Controller
     {
         public ApplicationDbContext db;
         private int timeRan;
         private List<DateTime> timesFailed = new List<DateTime>();
         List<double> times = new List<double>();
-        public DataCollection()
+        public BinanceDataCollection()
         {
             timeRan = 0;
         }
-        public DataCollection(ApplicationDbContext context)
+        public BinanceDataCollection(ApplicationDbContext context)
         {
             db = context;
         }
-        public void InsertData(DateTime nextTime)
+        public void RunCollection(DateTime nextTime)
         {
             List<string> tokens = new List<string> { "ETHBTC", "LTCBTC", "BNBBTC", "NEOBTC", "GASBTC", "BTCUSDT", "MCOBTC", "WTCBTC", "LRCBTC", "QTUMBTC", "YOYOBTC", "OMGBTC", "ZRXBTC", "STRATBTC", "SNGLSBTC", "BQXBTC", "KNCBTC", "FUNBTC", "SNMBTC", "IOTABTC", "LINKBTC", "XVGBTC", "SALTBTC", "MDABTC", "MTLBTC", "SUBBTC", "EOSBTC", "SNTBTC", "ETCBTC", "MTHBTC", "ENGBTC", "DNTBTC", "ZECBTC", "BNTBTC", "ASTBTC", "DASHBTC", "OAXBTC", "BTGBTC", "EVXBTC", "REQBTC", "VIBBTC", "TRXBTC", "POWRBTC", "ARKBTC", "XRPBTC", "MODBTC", "ENJBTC", "STORJBTC", "KMDBTC", "RCNBTC", "NULSBTC", "RDNBTC", "XMRBTC", "DLTBTC", "AMBBTC", "BATBTC", "BCPTBTC", "ARNBTC", "GVTBTC", "CDTBTC", "GXSBTC", "POEBTC", "QSPBTC", "BTSBTC", "XZCBTC", "LSKBTC", "TNTBTC", "FUELBTC", "MANABTC", "BCDBTC", "DGDBTC", "ADXBTC", "ADABTC", "PPTBTC", "CMTBTC", "XLMBTC", "CNDBTC", "LENDBTC", "WABIBTC", "TNBBTC", "WAVESBTC", "GTOBTC", "ICXBTC", "OSTBTC", "ELFBTC", "AIONBTC", "NEBLBTC", "BRDBTC", "EDOBTC", "WINGSBTC", "NAVBTC", "LUNBTC", "APPCBTC", "VIBEBTC", "RLCBTC", "INSBTC", "PIVXBTC", "IOSTBTC", "STEEMBTC", "NANOBTC", "VIABTC", "BLZBTC", "AEBTC", "NCASHBTC", "POABTC", "ZILBTC", "ONTBTC", "STORMBTC", "XEMBTC", "WANBTC", "WPRBTC", "QLCBTC", "SYSBTC", "GRSBTC", "CLOAKBTC", "GNTBTC", "LOOMBTC", "REPBTC", "TUSDBTC", "ZENBTC", "SKYBTC", "CVCBTC", "THETABTC", "IOTXBTC", "QKCBTC", "AGIBTC", "NXSBTC", "DATABTC", "SCBTC", "NPXSBTC", "KEYBTC", "NASBTC", "MFTBTC", "DENTBTC", "ARDRBTC", "HOTBTC", "VETBTC", "DOCKBTC", "POLYBTC", "PHXBTC", "HCBTC", "GOBTC", "PAXBTC", "RVNBTC", "DCRBTC", "USDCBTC", "MITHBTC", "BCHABCBTC" };
             
@@ -39,7 +39,7 @@ namespace BlockIndicate.Class
                     BinanceData binance = new BinanceData();
                     using (var client = new BinanceClient())
                     {
-                        var data = client.GetKlines(token, Binance.Net.Objects.KlineInterval.OneMinute, null, null, 2);
+                        var data = client.GetKlines(token, Binance.Net.Objects.KlineInterval.FiveMinutes, null, null, 2);
                         var kline = data.Data[0];
                         var currentData = client.Get24HPrice(token).Data;
                         string volType = currentData.QuoteVolume.GetType().ToString();
@@ -84,10 +84,10 @@ namespace BlockIndicate.Class
             {
                 System.Threading.Thread.Sleep(5000);
             } while (DateTime.Now < nextTime);
-            nextTime = nextTime.AddMinutes(1);
+            nextTime = nextTime.AddMinutes(5);
 
             int suspectedRows = timeRan * 148;
-            InsertData(nextTime);
+            RunCollection(nextTime);
         }
     }
 }

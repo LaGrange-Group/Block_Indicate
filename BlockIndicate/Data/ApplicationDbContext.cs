@@ -11,11 +11,12 @@ namespace BlockIndicate.Data
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<BinanceData> BinanceData { get; set; }
-        public DbSet<BittrexData> BittrexData { get; set; }
+        public DbSet<HuobiData> HuobiData { get; set; }
         public DbSet<DojiFinder> DojiFinders { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Market> Markets { get; set; }
         public DbSet<Exchange> Exchanges { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

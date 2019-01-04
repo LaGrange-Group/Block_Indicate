@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlockIndicate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190102200527_BittrexTable")]
-    partial class BittrexTable
+    [Migration("20190103151352_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,197 +20,6 @@ namespace BlockIndicate.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BlockIndicate.Models.BinanceData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("BitcoinVolume")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal>("Close")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<DateTime?>("CloseTime");
-
-                    b.Property<decimal>("High")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal>("Low")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal>("Open")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<DateTime?>("OpenTime");
-
-                    b.Property<decimal>("PercentageChange")
-                        .HasColumnType("decimal(18, 5)");
-
-                    b.Property<decimal>("QuoteAssetVolume")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<DateTime>("RealTime");
-
-                    b.Property<string>("Symbol");
-
-                    b.Property<decimal>("TakerBuyBaseAssetVolume")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal>("TakerBuyQuoteAssetVolume")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal>("TradeCount")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal>("Volume")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BinanceData");
-                });
-
-            modelBuilder.Entity("BlockIndicate.Models.BittrexData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal?>("Ask")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal?>("BaseVolume")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal?>("Bid")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal?>("High")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal?>("Last")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal?>("Low")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<int?>("OpenBuyOrders");
-
-                    b.Property<int?>("OpenSellOrders");
-
-                    b.Property<decimal?>("PercentageChange")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<decimal?>("PrevDay")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.Property<DateTime>("RealTime");
-
-                    b.Property<string>("Symbol");
-
-                    b.Property<DateTime>("TimeStamp");
-
-                    b.Property<decimal?>("Volume")
-                        .HasColumnType("decimal(18, 10)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BittrexData");
-                });
-
-            modelBuilder.Entity("BlockIndicate.Models.Customer", b =>
-                {
-                    b.Property<string>("FirstName")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("AccountActive");
-
-                    b.Property<bool>("AccountTrial");
-
-                    b.Property<string>("BinanceApiKey");
-
-                    b.Property<string>("BinanceApiSecret");
-
-                    b.Property<string>("BittrexApiKey");
-
-                    b.Property<string>("BittrexApiSecret");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<DateTime>("PaidStartDate");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<DateTime>("TrialStartDate");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("FirstName");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("BlockIndicate.Models.DojiFinder", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("AllExchanges");
-
-                    b.Property<bool>("AllMarkets");
-
-                    b.Property<bool>("DojiEmail");
-
-                    b.Property<double>("DojiLowerBody");
-
-                    b.Property<double>("DojiLowerWick");
-
-                    b.Property<double>("DojiPercentageIncrease");
-
-                    b.Property<bool>("DojiTextMessage");
-
-                    b.Property<double>("DojiUpperBody");
-
-                    b.Property<double>("DojiUpperWick");
-
-                    b.Property<double>("DojiVolumeIncrease");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DojiFinders");
-                });
-
-            modelBuilder.Entity("BlockIndicate.Models.Exchange", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Exchanges");
-                });
-
-            modelBuilder.Entity("BlockIndicate.Models.Market", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Markets");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -387,13 +196,6 @@ namespace BlockIndicate.Data.Migrations
                     b.ToTable("ApplicationUser");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
-                });
-
-            modelBuilder.Entity("BlockIndicate.Models.Customer", b =>
-                {
-                    b.HasOne("BlockIndicate.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
