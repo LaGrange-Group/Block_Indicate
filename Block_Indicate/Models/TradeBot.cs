@@ -14,6 +14,7 @@ namespace Block_Indicate.Models
         public string Name { get; set; }
         public string Type { get; set; }
         public int NumberOfTrades { get; set; }
+        public int NumberOfActiveTrades { get; set; }
         public bool AllMarkets { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal AllocatedBitcoin { get; set; }

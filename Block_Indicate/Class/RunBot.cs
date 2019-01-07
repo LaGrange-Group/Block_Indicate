@@ -10,8 +10,21 @@ namespace Block_Indicate.Class
 {
     public class RunBot
     {
-        public void Run(TradeBot tradeBot)
+        private readonly ApplicationDbContext db;
+        private TradeBot tradeBot;
+        private int numActiveTrades;
+        private int prevMaxResultId;
+        public RunBot(TradeBot tradeBot, ApplicationDbContext context, string userId)
         {
+            db = context;
+            this.tradeBot = tradeBot;
+            numActiveTrades = 0;
+            prevMaxResultId = db.Results.Max(r => r.Id);
+            Run(userId);
+        }
+        public void Run(string userId)
+        {
+
             var startBot = Task.Run(async () => {
                 Debug.WriteLine("Started " + tradeBot.Name + " Trade Bot");
                 DateTime nextTime = DateTime.Now;
@@ -19,11 +32,44 @@ namespace Block_Indicate.Class
                 {
                     if (DateTime.Now > nextTime)
                     {
-                        using (var db = new ApplicationDbContext())
+                        int highestId = db.Results.Max(r => r.Id);
+                        bool isNew = highestId > prevMaxResultId ? true : false;
+                        List<Result> newResults;
+                        Result newResult;
+                        if (isNew)
                         {
-                            TradeBotContract botContract = new TradeBotContract();
-                            Debug.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Ran " + tradeBot.Name + " Trade Bot");
+                            newResults = db.Results.Where(r => r.Id > prevMaxResultId).ToList();
+                            if (newResults.Count > 0)
+                            {
+                                decimal highestVolume = newResults.Max(r => r.BitcoinVolumeOriginal);
+                                newResult = newResults.Where(r => r.BitcoinVolumeOriginal == highestVolume).Single();
+                            }
+                            else
+                            {
+                                newResult = newResults[0];
+                            }
+                            if (tradeBot.NumberOfTrades > 1)
+                            {
+                                var startTrade = Task.Run(async () => {
+                                    using (var db = new ApplicationDbContext())
+                                    {
+                                        TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, userId, newResult);
+
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                using (var db = new ApplicationDbContext())
+                                {
+                                    TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, userId, newResult);
+
+                                }
+                            }
+                            prevMaxResultId = highestId;
+                            numActiveTrades++;
                         }
+                        Debug.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Ran Scan" + tradeBot.Name + " Trade Bot");
                         nextTime = nextTime.AddSeconds(10);
                     }
                 }

@@ -39,15 +39,20 @@ namespace Block_Indicate.Controllers
             tradeView.TradeBot.Exchange = "Binance";
             List<string> Exchanges = new List<string>() { "Binance", "Huobi" };
             List<string> Types = new List<string>() { "All", "Double Volume", "Four Hour Doji's" };
+            List<int> NumberOfTrades = new List<int>() { 1, 2, 3, 4 };
             ViewBag.Exchanges = new SelectList(Exchanges);
             ViewBag.Types = new SelectList(Types);
+            ViewBag.NumberOfTrades = new SelectList(Types);
             return View(tradeView);
         }
         [HttpPost]
         public IActionResult Index(TradeBot tradeBot)
         {
-            RunBot runBot = new RunBot();
-            runBot.Run(tradeBot);
+            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // Verify okay to start bot
+            // - Bitcoin Enough for amount of trades
+            // - AllMarkets True
+            RunBot runBot = new RunBot(tradeBot, db, userId);
             return RedirectToAction("Index");
         }
     }

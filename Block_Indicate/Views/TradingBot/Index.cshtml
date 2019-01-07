@@ -103,6 +103,13 @@
                                     <span asp-validation-for="TradeBot.Type" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
+                                    <h3>Number of Trades</h3>
+                                    <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="TradeBot.NumberOfTrades" asp-items="ViewBag.NumberOfTrades">
+                                        <option disabled selected>--- SELECT ---</option>
+                                    </select>
+                                    <span asp-validation-for="TradeBot.Type" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
                                     <h3>All Markets</h3>
                                     <input asp-for="TradeBot.AllMarkets" class="form-control" />
                                     <span asp-validation-for="TradeBot.AllMarkets" class="text-danger"></span>
