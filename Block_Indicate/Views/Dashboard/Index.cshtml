@@ -31,24 +31,51 @@
 </style>
 <div style="height:5em; position: absolute; top:0; right:0; left:17.8em; border-bottom:2px solid black">
     <div class="row">
-        <div class="col-md-3" style="height:10px">
-
+        <div class="col-md-2" style="height:10px">
+            <div style="padding-top:1.5em">
+                <span style="padding-left:2em"><span style="font-size:1.5em">BTC: </span><span style="font-size:1.2em">@Html.Raw(Model.TotalBTC.ToString("0.######"))</span></span>
+            </div>
         </div>
-        <div class="col-md-3" style="height:10px">
-
+        <div class="col-md-2" style="height:10px; padding:0px">
+            <div style="padding-top:1.5em; float:left">
+                <span><span style="font-size:1.5em">USD: </span><span style="font-size:1.2em">$@Html.Raw((Model.TotalBTC * Convert.ToDecimal(Model.CurrentPrices["btc"])).ToString("0.##"))</span></span>
+            </div>
         </div>
-        <div class="col-md-3" style=" height:10px">
+        <div class="col-md-2" style="height:10px">
             <div style="margin-top:1.5em; float:right">
                 <span><strong style="font-size:1.5em;">BTC</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:1.5em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["btc"])</strong></span></span>
             </div>
         </div>
-        <div class="col-md-3" style="height:10px">
+        <div class="col-md-2" style="height:10px">
             <div style=" margin-top:1.5em">
                 <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Etherium</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
             </div>
         </div>
+        <div style="padding:0px; height:10px" class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <center>
+                        <div style=" padding-top:0.5em">
+                            <img style="height:55px; width:55px; float:right;" src="https://i.imgur.com/PxtEzu3.png" />
+                        </div>
+                    </center>
+                </div>
+                <div class="col-md-4">
+                    <div style=" margin-top:1.5em;">
+                        <span style="font-size:1.5em;">@Html.Raw(Model.Customer.ApplicationUser.Email)</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+
+
 <div class="row" style="padding-top:2em">
     <div class="col-md-3">
         <div id="dashdiv">

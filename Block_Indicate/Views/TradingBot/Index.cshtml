@@ -1,0 +1,149 @@
+﻿@model Block_Indicate.Models.TradeBotViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    #dashdiv {
+        border-radius: 10px;
+        background-color: #dedede;
+        width: 100%;
+        height: 220px;
+    }
+
+    li {
+        font-size: 16px;
+        padding-bottom: 1em;
+    }
+
+    #align-center {
+        display: flex;
+        align-items: center;
+    }
+
+    table {
+        overflow-y: scroll;
+        height: 120px;
+        display: block;
+    }
+
+    td {
+        width: 10%;
+    }
+    /*#F2F2F2*/
+</style>
+<div style="height:5em; position: absolute; top:0; right:0; left:17.8em; border-bottom:2px solid black">
+    <div class="row">
+        <div class="col-md-2" style="height:10px">
+            <div style="padding-top:1.5em">
+                <span style="padding-left:2em"><span style="font-size:1.5em">BTC: </span><span style="font-size:1.2em">@Html.Raw(Model.EstimatedBTC.ToString("0.######"))</span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px; padding:0px">
+            <div style="padding-top:1.5em; float:left">
+                <span><span style="font-size:1.5em">USD: </span><span style="font-size:1.2em">$@Html.Raw((Model.EstimatedBTC * Convert.ToDecimal(Model.CurrentPrices["btc"])).ToString("0.##"))</span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px">
+            <div style="margin-top:1.5em; float:right">
+                <span><strong style="font-size:1.5em;">BTC</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:1.5em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["btc"])</strong></span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px">
+            <div style=" margin-top:1.5em">
+                <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Etherium</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
+            </div>
+        </div>
+        <div style="padding:0px; height:10px" class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <center>
+                        <div style=" padding-top:0.5em">
+                            <img style="height:55px; width:55px; float:right;" src="https://i.imgur.com/PxtEzu3.png" />
+                        </div>
+                    </center>
+                </div>
+                <div class="col-md-4">
+                    <div style=" margin-top:1.5em;">
+                        <span style="font-size:1.5em;">@Html.Raw(Model.Customer.ApplicationUser.Email)</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
+        <div id="dashdiv" style=" width:100%; height:850px; background-color:#dedede;">
+            <h2 style="padding-top:1em; padding-left:1em">Create New Bot</h2>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div style="padding-left:2em; padding-right:2em" class="col-md-12">
+                            <form asp-action="Index">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <h3>Unique Name</h3>
+                                    <input asp-for="TradeBot.Name" class="form-control" />
+                                    <span asp-validation-for="TradeBot.Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <h3>Signal Type</h3>
+                                    <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="TradeBot.Type" asp-items="ViewBag.Types">
+                                        <option disabled selected>--- SELECT ---</option>
+                                    </select>
+                                    <span asp-validation-for="TradeBot.Type" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <h3>All Markets</h3>
+                                    <input asp-for="TradeBot.AllMarkets" class="form-control" />
+                                    <span asp-validation-for="TradeBot.AllMarkets" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <h3>Allocated Bitcoin</h3>
+                                    <input asp-for="TradeBot.AllocatedBitcoin" class="form-control" />
+                                    <span asp-validation-for="TradeBot.AllocatedBitcoin" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <h3>Percent Take Profit</h3>
+                                    <input asp-for="TradeBot.PercentTakeProfit" class="form-control" />
+                                    <span asp-validation-for="TradeBot.PercentTakeProfit" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <h3>Percent Stop Loss</h3>
+                                    <input asp-for="TradeBot.PercentStopLoss" class="form-control" />
+                                    <span asp-validation-for="TradeBot.PercentStopLoss" class="text-danger"></span>
+                                </div>
+                                <div style="padding-bottom:2em" class="form-group">
+                                    <h3>Exchange</h3>
+                                    <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="TradeBot.Exchange" asp-items="ViewBag.Exchanges">
+                                        <option disabled selected>--- SELECT ---</option>
+                                    </select>
+                                    @*<span asp-validation-for="Exchange" class="text-danger"></span>*@
+                                </div>
+                                <center>
+                                    <div class="form-group">
+                                        <input style="width:75%" type="submit" value="Create" class="btn btn-primary" />
+                                    </div>
+                                </center>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
+

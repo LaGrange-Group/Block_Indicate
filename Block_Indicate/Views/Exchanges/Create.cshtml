@@ -33,48 +33,80 @@
 </style>
 <div style="height:5em; position: absolute; top:0; right:0; left:17.8em; border-bottom:2px solid black">
     <div class="row">
-        <div class="col-md-3" style="height:10px">
-
+        <div class="col-md-2" style="height:10px">
+            <div style="padding-top:1.5em">
+                <span style="padding-left:2em"><span style="font-size:1.5em">BTC: </span><span style="font-size:1.2em">@Html.Raw(Model.TotalBTC.ToString("0.######"))</span></span>
+            </div>
         </div>
-        <div class="col-md-3" style="height:10px">
-
+        <div class="col-md-2" style="height:10px; padding:0px">
+            <div style="padding-top:1.5em; float:left">
+                <span><span style="font-size:1.5em">USD: </span><span style="font-size:1.2em">$@Html.Raw((Model.TotalBTC * Convert.ToDecimal(Model.CurrentPrices["btc"])).ToString("0.##"))</span></span>
+            </div>
         </div>
-        <div class="col-md-3" style=" height:10px">
+        <div class="col-md-2" style="height:10px">
             <div style="margin-top:1.5em; float:right">
                 <span><strong style="font-size:1.5em;">BTC</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:1.5em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["btc"])</strong></span></span>
             </div>
         </div>
-        <div class="col-md-3" style="height:10px">
+        <div class="col-md-2" style="height:10px">
             <div style=" margin-top:1.5em">
                 <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Etherium</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
             </div>
         </div>
+        <div style="padding:0px; height:10px" class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <center>
+                        <div style=" padding-top:0.5em">
+                            <img style="height:55px; width:55px; float:right;" src="https://i.imgur.com/PxtEzu3.png" />
+                        </div>
+                    </center>
+                </div>
+                <div class="col-md-4">
+                    <div style=" margin-top:1.5em;">
+                        <span style="font-size:1.5em;">@Html.Raw(Model.Customer.ApplicationUser.Email)</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<h2>Connect Api</h2>
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ApiKey" class="control-label"></label>
-                <input asp-for="ApiKey" class="form-control" />
-                <span asp-validation-for="ApiKey" class="text-danger"></span>
+<br />
+<div id="dashdiv" style=" width:100%; height:500px; background-color:#dedede;">
+    <h2 style="padding-top:1em; padding-left:1em">Connect Your Exchange</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div style="padding-left:2em; padding-right:2em" class="col-md-12">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <h3>API Key</h3>
+                            <input asp-for="ApiKey" class="form-control" />
+                            <span asp-validation-for="ApiKey" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <h3>API Secret</h3>
+                            <input asp-for="ApiSecrect" class="form-control" />
+                            <span asp-validation-for="ApiSecrect" class="text-danger"></span>
+                        </div>
+                        <div style="padding-bottom:2em" class="form-group">
+                            <h3>Exchange</h3>
+                            <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="Exchange" asp-items="ViewBag.Exchanges"></select>
+                            @*<span asp-validation-for="Exchange" class="text-danger"></span>*@
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Connect" class="btn btn-default" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ApiSecrect" class="control-label"></label>
-                <input asp-for="ApiSecrect" class="form-control" />
-                <span asp-validation-for="ApiSecrect" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Exchange" class="control-label"></label>
-                <input asp-for="Exchange" class="form-control" />
-                <span asp-validation-for="Exchange" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+        </div>
+        @*<div class="col-md-6">
+            </div>*@
     </div>
 </div>

@@ -116,15 +116,16 @@ namespace Block_Indicate.Class
                             var balances = accountInfo.Data.Balances;
                             List<Tuple<string, decimal>> valid = new List<Tuple<string, decimal>>();
                             valid = valid.OrderBy(v => v.Item2).ToList();
-                           
+
                             foreach (var market in balances)
                             {
-                                if (market.Total > 0)
+                                if (market.Total > 0 || market.Asset == "BTC")
                                 {
                                     Tuple<string, decimal> tuple = new Tuple<string, decimal>(market.Asset, market.Total);
                                     valid.Add(tuple);
                                 }
                             }
+                            valid.Add(GetEstimatedBTC(valid));
                             return valid;
                         }
                     }
@@ -157,7 +158,35 @@ namespace Block_Indicate.Class
             {
                 return GetAccountBalances(exchange);
             }
+        }
 
+        private static Tuple<string, decimal> GetEstimatedBTC(List<Tuple<string, decimal>> balances)
+        {
+            decimal totalBTC = 0m;
+            foreach (Tuple<string, decimal> balance in balances)
+            {
+                decimal btcAmount = RetrieveBTCAmount(balance.Item1, balance.Item2);
+                totalBTC += btcAmount;
+            }
+            Tuple<string, decimal> tuple = new Tuple<string, decimal>("EstimatedBTC", totalBTC);
+            return tuple;
+        }
+
+        private static decimal RetrieveBTCAmount(string symbol, decimal amount)
+        {
+            try
+            {
+                using (var client = new BinanceClient())
+                {
+                    var token = client.Get24HPrice(symbol + "BTC").Data;
+                    decimal btcAmount = token.LastPrice * amount;
+                    return btcAmount;
+                }
+            }
+            catch
+            {
+                return 0m;
+            }
         }
     }
 }

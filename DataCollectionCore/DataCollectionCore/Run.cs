@@ -49,12 +49,14 @@ namespace DataCollectionCore
                             InsertBinanceDoubleVolume binanceDoubleVolume = new InsertBinanceDoubleVolume(db);
                             binanceDoubleVolume.InsertGeneral();
                             binanceDoubleVolume.InsertValidDoubleVolume();
+                            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Inserted Binance General");
                         }
                         nextTime = nextTime.AddMinutes(2);
                     }
                 }
             });
-            var resultsScanAll = Task.Run(async () => {
+            var resultsScanAll = Task.Run(async () =>
+            {
                 Console.WriteLine("Starting Results Scan");
                 DateTime nextTime = DateTime.Now;
                 while (true)
@@ -73,7 +75,8 @@ namespace DataCollectionCore
                     }
                 }
             });
-            var scanTriggeredFourDoji = Task.Run(async () => {
+            var scanTriggeredFourDoji = Task.Run(async () =>
+            {
                 DateTime nextTime = DateTime.Now;
                 while (true)
                 {

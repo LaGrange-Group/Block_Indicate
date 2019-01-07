@@ -277,7 +277,8 @@ namespace DataCollectionCore
             //double noTradeAvgPercentDoubleVolume = Convert.ToDouble(noTradePercentsDoubleVolume.Average());
             //double noTradeAvgPercentFourHourDoji = Convert.ToDouble(noTradePercentsFourHourDoji.Average());
 
-            TradePerformances performances = db.TradePerformances.FirstOrDefault();
+            List<TradePerformances> performancesList = db.TradePerformances.ToList();
+            TradePerformances performances = performancesList[0];
             performances.Dvbsuccess = percentSuccessDV;
             performances.Dvbfail = percentFailDV;
             performances.DvbavgTime = "Not Implemented";

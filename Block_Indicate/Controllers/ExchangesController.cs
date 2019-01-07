@@ -7,6 +7,8 @@ using Block_Indicate.Class;
 using Block_Indicate.Data;
 using Block_Indicate.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Block_Indicate.Controllers
 {
@@ -25,9 +27,16 @@ namespace Block_Indicate.Controllers
 
         public IActionResult Create()
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
             NavPrice navPrice = new NavPrice();
             ApiConnectionViewModel apiConnection = new ApiConnectionViewModel();
+            apiConnection.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
+            apiConnection.TotalBTC = apiConnection.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+            apiConnection.Customer = customer;
             apiConnection.CurrentPrices = navPrice.CurrentPrices();
+            List<string> Exchanges = new List<string>() { "Binance", "Huobi" };
+            ViewBag.Exchanges = new SelectList(Exchanges);
             return View(apiConnection);
         }
         [HttpPost]

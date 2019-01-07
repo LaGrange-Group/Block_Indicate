@@ -4,14 +4,16 @@ using Block_Indicate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Block_Indicate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190107125410_Laptop")]
+    partial class Laptop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,44 +175,6 @@ namespace Block_Indicate.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Results");
-                });
-
-            modelBuilder.Entity("Block_Indicate.Models.TradeBot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("AllMarkets");
-
-                    b.Property<decimal>("AllocatedBitcoin")
-                        .HasColumnType("decimal(28, 18)");
-
-                    b.Property<string>("BaseCurrency");
-
-                    b.Property<int>("CustomerId");
-
-                    b.Property<string>("Exchange");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("NumberOfTrades");
-
-                    b.Property<decimal>("PercentStopLoss")
-                        .HasColumnType("decimal(4, 4)");
-
-                    b.Property<decimal>("PercentTakeProfit")
-                        .HasColumnType("decimal(4, 4)");
-
-                    b.Property<bool>("Status");
-
-                    b.Property<string>("Type");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("TradeBots");
                 });
 
             modelBuilder.Entity("Block_Indicate.Models.TradePerformance", b =>
@@ -501,14 +465,6 @@ namespace Block_Indicate.Data.Migrations
                     b.HasOne("Block_Indicate.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Block_Indicate.Models.TradeBot", b =>
-                {
-                    b.HasOne("Block_Indicate.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

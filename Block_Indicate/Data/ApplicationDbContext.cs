@@ -17,6 +17,7 @@ namespace Block_Indicate.Data
         public DbSet<ValidDoubleVolumeBinance> ValidDoubleVolumeBinance { get; set; }
         public DbSet<TradePerformance> TradePerformances { get; set; }
         public DbSet<Result> Results { get; set; }
+        public DbSet<TradeBot> TradeBots { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
