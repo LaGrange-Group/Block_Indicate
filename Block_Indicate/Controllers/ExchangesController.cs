@@ -25,7 +25,10 @@ namespace Block_Indicate.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            NavPrice navPrice = new NavPrice();
+            ApiConnectionViewModel apiConnection = new ApiConnectionViewModel();
+            apiConnection.CurrentPrices = navPrice.CurrentPrices();
+            return View(apiConnection);
         }
         [HttpPost]
         public IActionResult Create(ApiConnectionViewModel apiInfo)

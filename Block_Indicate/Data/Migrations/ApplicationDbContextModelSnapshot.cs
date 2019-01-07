@@ -62,7 +62,151 @@ namespace Block_Indicate.Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Block_Indicate.Models.DoubleVolumeBinance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("BitcoinVolume")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("LastPrice")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<double>("PercentageChange");
+
+                    b.Property<DateTime>("RealTime");
+
+                    b.Property<string>("Symbol");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DoubleVolumeBinance");
+                });
+
             modelBuilder.Entity("Block_Indicate.Models.FourHourDoji", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("BitcoinVolume")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("BitcoinVolumeToMatch")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("Close")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("High")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<bool>("Logged");
+
+                    b.Property<decimal>("Low")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("Open")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("PriceToMatch")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<DateTime>("RealTime");
+
+                    b.Property<string>("Symbol");
+
+                    b.Property<decimal>("Volume")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FourHourDojis");
+                });
+
+            modelBuilder.Entity("Block_Indicate.Models.Result", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("BitcoinVolumeAF")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("BitcoinVolumeOriginal")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<string>("Exchange");
+
+                    b.Property<decimal>("LastPrice")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("MaxPercentDiff24Hr")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<bool?>("NoTrade");
+
+                    b.Property<bool>("Open");
+
+                    b.Property<double>("PercentageChangeAF");
+
+                    b.Property<int>("PrevRowId");
+
+                    b.Property<DateTime>("RealTime");
+
+                    b.Property<bool?>("ResultOfTrade");
+
+                    b.Property<string>("Symbol");
+
+                    b.Property<string>("TimeToResult");
+
+                    b.Property<string>("Type");
+
+                    b.Property<decimal>("VolumeAF")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("Vwap")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Results");
+                });
+
+            modelBuilder.Entity("Block_Indicate.Models.TradePerformance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DVBAvgTime");
+
+                    b.Property<double>("DVBFail");
+
+                    b.Property<double>("DVBNoTrade");
+
+                    b.Property<double>("DVBNoTradeAvgSettle");
+
+                    b.Property<double>("DVBSuccess");
+
+                    b.Property<string>("FourDBAvgTime");
+
+                    b.Property<double>("FourDBFail");
+
+                    b.Property<double>("FourDBNoTrade");
+
+                    b.Property<double>("FourDBNoTradeAvgSettle");
+
+                    b.Property<double>("FourDBSuccess");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TradePerformances");
+                });
+
+            modelBuilder.Entity("Block_Indicate.Models.TriggeredDojiFourHour", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,11 +221,18 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("High")
                         .HasColumnType("decimal(28, 18)");
 
+                    b.Property<decimal>("LastPrice")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<bool>("Logged");
+
                     b.Property<decimal>("Low")
                         .HasColumnType("decimal(28, 18)");
 
                     b.Property<decimal>("Open")
                         .HasColumnType("decimal(28, 18)");
+
+                    b.Property<double>("PercentageChange");
 
                     b.Property<DateTime>("RealTime");
 
@@ -90,9 +241,45 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("Volume")
                         .HasColumnType("decimal(28, 18)");
 
+                    b.Property<decimal>("Vwap")
+                        .HasColumnType("decimal(28, 18)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("FourHourDojis");
+                    b.ToTable("TriggeredDojiFourHours");
+                });
+
+            modelBuilder.Entity("Block_Indicate.Models.ValidDoubleVolumeBinance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("BitcoinVolume")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("LastPrice")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<bool>("Logged");
+
+                    b.Property<double>("PercentageChange");
+
+                    b.Property<int>("PrevRowId");
+
+                    b.Property<DateTime>("RealTime");
+
+                    b.Property<string>("Symbol");
+
+                    b.Property<decimal>("Volume")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("Vwap")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ValidDoubleVolumeBinance");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

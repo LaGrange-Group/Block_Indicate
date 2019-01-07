@@ -23,21 +23,13 @@ namespace Block_Indicate
         {
             Configuration = configuration;
 
-            Thread doji = new Thread(delegate ()
-            {
-                using (var db = new ApplicationDbContext())
-                {
-                    DojiScan dojiScan = new DojiScan(db);
-                    dojiScan.Scan4hrDoji();
-                }
-            });
-            doji.Start();
-
-            Thread CurrentPrices = new Thread(delegate ()
-            {
-                NavPrice.CurrentPrices(DateTime.Now.AddMinutes(5));
-            });
-            CurrentPrices.Start();
+            //var insertDoji = Task.Run(async () =>
+            //{
+            //    while (true)
+            //    {
+            //        NavPrice.CurrentPrices(DateTime.Now.AddMinutes(5));
+            //    }
+            //});
         }
 
         public IConfiguration Configuration { get; }

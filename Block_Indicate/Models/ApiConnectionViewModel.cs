@@ -10,5 +10,6 @@ namespace Block_Indicate.Models
         public string ApiKey { get; set; }
         public string ApiSecrect { get; set; }
         public string Exchange { get; set; }
+        public Dictionary<string, double> CurrentPrices { get; set; }
     }
 }

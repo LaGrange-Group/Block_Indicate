@@ -57,7 +57,6 @@ namespace Block_Indicate.Class
                 using (var client = new BinanceClient())
                 {
                     var accountInfo = client.GetAccountInfo();
-                    var balances = accountInfo.Data.Balances;
                     if (accountInfo.Success)
                     {
                         AddExchangeIfNotExistent(exchange);
@@ -97,56 +96,68 @@ namespace Block_Indicate.Class
             }
         }
 
-        public static Dictionary<string, decimal> GetAccountBalances(string exchange)
+        public static List<Tuple<string, decimal>> GetAccountBalances(string exchange)
         {
-            if (exchange == "Binance")
+            try
             {
-                BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+                if (exchange == "Binance")
                 {
-                    ApiCredentials = new ApiCredentials(BinanceApiKey, BinanceApiSecret),
-                    LogVerbosity = LogVerbosity.Debug,
-                    LogWriters = new List<TextWriter> { Console.Out }
-                });
-                using (var client = new BinanceClient())
-                {
-                    var accountInfo = client.GetAccountInfo();
-                    var balances = accountInfo.Data.Balances;
-                    if (accountInfo.Success)
+                    BinanceClient.SetDefaultOptions(new BinanceClientOptions()
                     {
-                        Dictionary<string, decimal> valid = new Dictionary<string, decimal>();
-                        foreach (var market in balances)
+                        ApiCredentials = new ApiCredentials(BinanceApiKey, BinanceApiSecret),
+                        LogVerbosity = LogVerbosity.Debug,
+                        LogWriters = new List<TextWriter> { Console.Out }
+                    });
+                    using (var client = new BinanceClient())
+                    {
+                        var accountInfo = client.GetAccountInfo();
+                        if (accountInfo.Success)
                         {
-                            if (market.Total > 0)
+                            var balances = accountInfo.Data.Balances;
+                            List<Tuple<string, decimal>> valid = new List<Tuple<string, decimal>>();
+                            valid = valid.OrderBy(v => v.Item2).ToList();
+                           
+                            foreach (var market in balances)
                             {
-                                valid.Add(market.Asset, market.Total);
+                                if (market.Total > 0)
+                                {
+                                    Tuple<string, decimal> tuple = new Tuple<string, decimal>(market.Asset, market.Total);
+                                    valid.Add(tuple);
+                                }
                             }
+                            return valid;
                         }
-                        return valid;
                     }
                 }
-            }
-            else if (exchange == "Huobi")
-            {
-                using (var client = new HuobiClient())
+                else if (exchange == "Huobi")
                 {
-                    client.SetApiCredentials(HuobiApiKey, HuobiApiSecret);
-                    var accounts = client.GetAccounts();
-                    var balances = client.GetBalances(accounts.Data[0].Id).Data;
-                    if (accounts.Success)
+                    using (var client = new HuobiClient())
                     {
-                        Dictionary<string, decimal> valid = new Dictionary<string, decimal>();
-                        foreach (var market in balances)
+                        client.SetApiCredentials(HuobiApiKey, HuobiApiSecret);
+                        var accounts = client.GetAccounts();
+                        var balances = client.GetBalances(accounts.Data[0].Id).Data;
+                        if (accounts.Success)
                         {
-                            if (market.Balance > 0)
+                            List<Tuple<string, decimal>> valid = new List<Tuple<string, decimal>>();
+                            foreach (var market in balances)
                             {
-                                valid.Add(market.Currency, market.Balance);
+                                if (market.Balance > 0)
+                                {
+                                    Tuple<string, decimal> tuple = new Tuple<string, decimal>(market.Currency, market.Balance);
+                                    valid.Add(tuple);
+                                }
                             }
+                            return valid;
                         }
-                        return valid;
                     }
                 }
+                return null;
             }
-            return null;
+            catch
+            {
+                return GetAccountBalances(exchange);
+            }
+
         }
     }
 }

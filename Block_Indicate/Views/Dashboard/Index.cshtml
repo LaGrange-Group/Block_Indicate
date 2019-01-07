@@ -3,7 +3,33 @@
     ViewData["Title"] = "Dashboard";
 }
 @*position: absolute; top:0; right:0; left:0; float:right*@
-<div style="background-color:#F2F2F2; height:5em; position: absolute; top:0; right:0; left:17.8em;">
+<style>
+    #dashdiv {
+        border-radius: 10px;
+        background-color: #dedede;
+        width:100%;
+        height:220px;
+    }
+    li{
+        font-size:16px;
+        padding-bottom:1em;
+        color: #747474
+    }
+    #align-center {
+        display: flex;
+        align-items: center;
+    }
+    table {
+        overflow-y: scroll;
+        height: 120px;
+        display: block;
+    }
+    td{
+        width:10%;
+    }
+    /*#F2F2F2*/
+</style>
+<div style="height:5em; position: absolute; top:0; right:0; left:17.8em; border-bottom:2px solid black">
     <div class="row">
         <div class="col-md-3" style="height:10px">
 
@@ -23,7 +49,250 @@
         </div>
     </div>
 </div>
-<h2 style="top:0">Dashboard</h2>
-<div style="border:1px solid gray; width:100%; height:200px; border-radius:40px">
+<div class="row" style="padding-top:2em">
+    <div class="col-md-3">
+        <div id="dashdiv">
+            <h4 style="padding-top:1em; padding-left:1em">In Development</h4>
+            <hr />
+            <ul>
+                <li>
+                    Trading Bot
+                </li>
+                <li>
+                    Doji Finder
+                </li>
+                <li>
+                    Request a Feature
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div id="dashdiv">
+            <h4 style="padding-top:1em; padding-left:1em">Released Features</h4>
+            <hr />
+            <ul>
+                <li>
+                    Dashboard
+                </li>
+                <li>
+                    Dynamic Price Header
+                </li>
+                <li>
+                    Double Volume + 4 Hour Doji's
+                </li>
+            </ul>
 
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div id="dashdiv">
+            <h4 style="padding-top:1em; padding-left:1em">Active Bots</h4>
+            <hr />
+
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div id="dashdiv" style="vertical-align:middle">
+            <h4 style="padding-top:1em; padding-left:1em">Performance</h4>
+            <hr />
+            <center>
+                <h3 style="padding-top:0.15em">Success: <span style="color:green">@Math.Round(Model.TradePerformance.DVBSuccess, 2) %</span></h3>
+                <h3>No Trade: <span style="color:yellow">@Math.Round(Model.TradePerformance.DVBNoTrade, 2) %</span></h3>
+                <h3>Fail: <span style="color:red">@Math.Round(Model.TradePerformance.DVBFail, 2) %</span></h3>
+            </center>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-8">
+        <div id="dashdiv" style=" width:100%; height:200px; background-color:#dedede">
+            @if (Model.BinanceBalances != null)
+            {
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div style="padding-top:4em; padding-left:2em">
+                                    <h2>Binance</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div style="padding-top:3.5em">
+                                    <img style="height:100px; width:100px" src="https://i.imgur.com/wolEHmr.png" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        @*<div style="border-right:1px solid white; height:10em; padding-top:1em" />*@
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3>Asset</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>Amount</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>Percent</h3>
+                            </div>
+                        </div>
+                        <table>
+                            <tr>
+                                @*<th>Asset</th>
+                                <th>Amount</th>
+                                <th>Percent of Wallet</th>*@
+                            </tr>
+                            @foreach (var row in Model.BinanceBalances)
+                            {
+                            <tr>
+                                <td>@Html.Raw(row.Item1)</td>
+                                <td>@Html.Raw(row.Item2)</td>
+                            </tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div id="dashdiv" style=" width:100%; height:200px; background-color:#dedede">
+
+        </div>
+    </div>
+</div>
+
+<br />
+<div id="dashdiv" style=" width:100%; height:400px; background-color:#dedede;">
+    <div class="row">
+        <div class="col-md-6">
+            <center>
+                <h4>Double Volume</h4>
+            </center>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+            <table style="height:300px; padding-left:1em">
+                <tr>
+                    <th>
+                        Symbol
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        VWAP
+                    </th>
+                    <th>
+                        Precent Change
+                    </th>
+                    <th>
+                        Volume (BTC)
+                    </th>
+                    <th>
+                        Time of Signal
+                    </th>
+                </tr>
+                @foreach (var row in Model.ValidDoubleVolumesBinance)
+                {
+                <tr>
+                    <td>
+                        <strong>@Html.Raw(row.Symbol)</strong>
+                    </td>
+                    <td>
+                        @Html.Raw(row.LastPrice.ToString("0.########################"))
+                    </td>
+                    <td>
+                        @Html.Raw(row.Vwap.ToString("0.########################"))
+                    </td>
+                    <td>
+                        @if (row.PercentageChange > 0)
+                        {
+                            <span style="color:green">@Html.Raw(Math.Round(row.PercentageChange, 2)) %</span>
+                        }
+                        else
+                        {
+                            <span style="color:red">@Html.Raw(row.PercentageChange) %</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.Raw(row.BitcoinVolume.ToString("0.##"))
+                    </td>
+                    <td>
+                        @Html.Raw(row.RealTime)
+                    </td>
+                </tr>
+                }
+            </table>
+        </div>
+        <div class="col-md-6">
+            <center>
+                <h4>4 Hour Doji's</h4>
+            </center>
+            <hr />
+            <table style="height:300px; padding-left:1em">
+                <tr>
+                    <th>
+                        Symbol
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        VWAP
+                    </th>
+                    <th>
+                        Precent Change
+                    </th>
+                    <th>
+                        Volume (BTC)
+                    </th>
+                    <th>
+                        Time of Signal
+                    </th>
+                </tr>
+                @foreach (var row in Model.ValidDojiFourHoursBinance)
+                {
+                    <tr>
+                        <td>
+                            <strong>@Html.Raw(row.Symbol)</strong>
+                        </td>
+                        <td>
+                            @Html.Raw(row.LastPrice.ToString("0.########################"))
+                        </td>
+                        <td>
+                            @Html.Raw(row.Vwap.ToString("0.########################"))
+                        </td>
+                        <td>
+                            @if (row.PercentageChange > 0)
+                            {
+                                <span style="color:green">@Html.Raw(Math.Round(row.PercentageChange, 2)) %</span>
+                            }
+                            else
+                            {
+                                <span style="color:red">@Html.Raw(row.PercentageChange) %</span>
+                            }
+                        </td>
+                        <td>
+                            @Html.Raw(row.BitcoinVolume.ToString("0.##"))
+                        </td>
+                        <td>
+                            @Html.Raw(row.RealTime)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
 </div>

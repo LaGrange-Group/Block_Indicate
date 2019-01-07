@@ -20,11 +20,17 @@ namespace Block_Indicate.Controllers
         }
         public IActionResult Index()
         {
+            NavPrice navPrice = new NavPrice();
+            DateTime a = DateTime.Now;
+            DateTime prevDay = new DateTime(a.Year, a.Month, a.Day - 1, a.Hour, a.Minute, 0);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             DashboardViewModel dashboard = new DashboardViewModel();
+            dashboard.CurrentPrices = navPrice.CurrentPrices();
             dashboard.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
             dashboard.HuobiBalances = ExchangeApiKeys.HuobiConnection == true ? ExchangeApiKeys.GetAccountBalances("Huobi") : null;
-            dashboard.CurrentPrices = NavPrice.currentPrices;
+            dashboard.ValidDojiFourHoursBinance = db.TriggeredDojiFourHours.Where(d => d.RealTime > prevDay).ToList();
+            dashboard.ValidDoubleVolumesBinance = db.ValidDoubleVolumeBinance.Where(d => d.RealTime > prevDay).ToList();
+            dashboard.TradePerformance = db.TradePerformances.FirstOrDefault();
             return View(dashboard);
         }
 

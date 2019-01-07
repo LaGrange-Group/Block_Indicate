@@ -24,6 +24,11 @@ namespace Block_Indicate.Models
         public decimal Volume { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal BitcoinVolume { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal BitcoinVolumeToMatch { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal PriceToMatch { get; set; }
+        public bool Logged { get; set; }
         public DateTime RealTime { get; set; }
     }
 }

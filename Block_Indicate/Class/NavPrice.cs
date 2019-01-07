@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Binance.Net;
 namespace Block_Indicate.Class
 {
-    public static class NavPrice
+    public class NavPrice
     {
-        public static Dictionary<string, double> currentPrices = new Dictionary<string, double>();
-        public static void CurrentPrices(DateTime nextTime)
+        public Dictionary<string, double> CurrentPrices()
         {
+            Dictionary<string, double> currentPrices = new Dictionary<string, double>();
             try
             {
                 using (var client = new BinanceClient())
@@ -19,21 +19,22 @@ namespace Block_Indicate.Class
                     currentPrices.Add("btc", btc);
                     currentPrices.Add("eth", eth);
                 }
+                return currentPrices;
             }
             catch
             {
-                CurrentPrices(nextTime);
-            }
-            CountUntilNextMin(nextTime);
-        }
-        public static void CountUntilNextMin(DateTime nextTime)
-        {
-            do
-            {
                 System.Threading.Thread.Sleep(5000);
-            } while (DateTime.Now < nextTime);
-            nextTime = nextTime.AddMinutes(5);
-            CurrentPrices(nextTime);
+                return CurrentPrices();
+            }
         }
+        //public static void CountUntilNextMin(DateTime nextTime)
+        //{
+        //    do
+        //    {
+        //        System.Threading.Thread.Sleep(5000);
+        //    } while (DateTime.Now < nextTime);
+        //    nextTime = nextTime.AddMinutes(5);
+        //    CurrentPrices(nextTime);
+        //}
     }
 }

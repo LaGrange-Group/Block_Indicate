@@ -12,6 +12,11 @@ namespace Block_Indicate.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<FourHourDoji> FourHourDojis { get; set; }
+        public DbSet<TriggeredDojiFourHour> TriggeredDojiFourHours { get; set; }
+        public DbSet<DoubleVolumeBinance> DoubleVolumeBinance { get; set; }
+        public DbSet<ValidDoubleVolumeBinance> ValidDoubleVolumeBinance { get; set; }
+        public DbSet<TradePerformance> TradePerformances { get; set; }
+        public DbSet<Result> Results { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
