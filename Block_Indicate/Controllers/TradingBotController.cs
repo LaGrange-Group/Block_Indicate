@@ -9,6 +9,7 @@ using Block_Indicate.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Telegram.Bot;
 
 namespace Block_Indicate.Controllers
 {
@@ -33,16 +34,19 @@ namespace Block_Indicate.Controllers
             tradeView.CurrentPrices = navPrice.CurrentPrices();
             tradeView.TradeBot = new TradeBot();
             tradeView.TradeBot.AllMarkets = true;
-            tradeView.TradeBot.AllocatedBitcoin = tradeView.TotalBTC;
+            tradeView.TradeBot.AllocatedBitcoin = 0.003411m;
             tradeView.TradeBot.PercentTakeProfit = 2;
             tradeView.TradeBot.PercentStopLoss = -10;
             tradeView.TradeBot.Exchange = "Binance";
+            tradeView.TradeBot.Type = "All";
+            tradeView.TradeBot.NumberOfTrades = 1;
+            tradeView.TradeBot.Name = "Davids Bot";
             List<string> Exchanges = new List<string>() { "Binance", "Huobi" };
             List<string> Types = new List<string>() { "All", "Double Volume", "Four Hour Doji's" };
             List<int> NumberOfTrades = new List<int>() { 1, 2, 3, 4 };
             ViewBag.Exchanges = new SelectList(Exchanges);
             ViewBag.Types = new SelectList(Types);
-            ViewBag.NumberOfTrades = new SelectList(Types);
+            ViewBag.NumberOfTrades = new SelectList(NumberOfTrades);
             return View(tradeView);
         }
         [HttpPost]
@@ -53,6 +57,11 @@ namespace Block_Indicate.Controllers
             // - Bitcoin Enough for amount of trades
             // - AllMarkets True
             RunBot runBot = new RunBot(tradeBot, db, userId);
+            var botClient = new TelegramBotClient("742774159:AAEWX5b7ZYkorD5-L64apFG6PdIjs57MTYY");
+            botClient.SendTextMessageAsync(
+              chatId: 542294321,
+              text: "Created New Bot " + tradeBot.Name
+            );
             return RedirectToAction("Index");
         }
     }

@@ -178,9 +178,19 @@ namespace Block_Indicate.Class
             {
                 using (var client = new BinanceClient())
                 {
-                    var token = client.Get24HPrice(symbol + "BTC").Data;
-                    decimal btcAmount = token.LastPrice * amount;
-                    return btcAmount;
+                    if (symbol == "BTC")
+                    {
+                        var token = client.Get24HPrice(symbol + "USDT").Data;
+                        decimal btcAmount = amount;
+                        return btcAmount;
+                    }
+                    else
+                    {
+                        var token = client.Get24HPrice(symbol + "BTC").Data;
+                        decimal btcAmount = token.LastPrice * amount;
+                        return btcAmount;
+                    }
+
                 }
             }
             catch

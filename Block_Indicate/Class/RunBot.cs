@@ -14,19 +14,20 @@ namespace Block_Indicate.Class
         private TradeBot tradeBot;
         private int numActiveTrades;
         private int prevMaxResultId;
+        private string binanceApikey;
+        private string binanceApiSecret;
         public RunBot(TradeBot tradeBot, ApplicationDbContext context, string userId)
         {
             db = context;
             this.tradeBot = tradeBot;
             numActiveTrades = 0;
-            prevMaxResultId = db.Results.Max(r => r.Id);
+            prevMaxResultId = db.Results.Max(r => r.Id) - 1;
             Run(userId);
         }
-        public void Run(string userId)
+        public async Task Run(string userId)
         {
 
             var startBot = Task.Run(async () => {
-                Debug.WriteLine("Started " + tradeBot.Name + " Trade Bot");
                 DateTime nextTime = DateTime.Now;
                 while (true)
                 {
@@ -35,11 +36,11 @@ namespace Block_Indicate.Class
                         int highestId = db.Results.Max(r => r.Id);
                         bool isNew = highestId > prevMaxResultId ? true : false;
                         List<Result> newResults;
-                        Result newResult;
+                        Result newResult = new Result();
                         if (isNew)
                         {
                             newResults = db.Results.Where(r => r.Id > prevMaxResultId).ToList();
-                            if (newResults.Count > 0)
+                            if (newResults.Count > 1)
                             {
                                 decimal highestVolume = newResults.Max(r => r.BitcoinVolumeOriginal);
                                 newResult = newResults.Where(r => r.BitcoinVolumeOriginal == highestVolume).Single();
@@ -50,6 +51,7 @@ namespace Block_Indicate.Class
                             }
                             if (tradeBot.NumberOfTrades > 1)
                             {
+
                                 var startTrade = Task.Run(async () => {
                                     using (var db = new ApplicationDbContext())
                                     {
