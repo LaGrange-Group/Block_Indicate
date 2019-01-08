@@ -172,6 +172,8 @@ namespace Block_Indicate.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PrevRowId");
+
                     b.ToTable("Results");
                 });
 
@@ -505,6 +507,14 @@ namespace Block_Indicate.Data.Migrations
                     b.HasOne("Block_Indicate.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Block_Indicate.Models.Result", b =>
+                {
+                    b.HasOne("Block_Indicate.Models.DoubleVolumeBinance", "DoubleVolumeBinance")
+                        .WithMany()
+                        .HasForeignKey("PrevRowId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Block_Indicate.Models.TradeBot", b =>

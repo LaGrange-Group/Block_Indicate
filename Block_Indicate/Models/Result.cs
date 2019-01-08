@@ -23,7 +23,9 @@ namespace Block_Indicate.Models
         public decimal BitcoinVolumeAF { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal BitcoinVolumeOriginal {get; set;}
+        [ForeignKey("DoubleVolumeBinance")]
         public int PrevRowId { get; set; }
+        public DoubleVolumeBinance DoubleVolumeBinance { get; set; }
         public bool? ResultOfTrade { get; set; }
         public bool Open { get; set; }
         public bool? NoTrade { get; set; }
