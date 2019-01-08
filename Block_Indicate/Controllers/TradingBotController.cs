@@ -53,11 +53,18 @@ namespace Block_Indicate.Controllers
         public IActionResult Index(TradeBot tradeBot)
         {
             string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Customer customer = db.Customers.Where(c => c.UserId == userId).Single();
+            List<TradeBot> tradeBots = db.TradeBots.Where(b => b.CustomerId == customer.Id).ToList();
             // Verify okay to start bot
             // - Bitcoin Enough for amount of trades
             // - AllMarkets True
+            tradeBot.CustomerId = customer.Id;
+            tradeBot.Status = true;
+            tradeBot.UniqueSetId = tradeBots.Count > 0 ? tradeBots.Count + 1 : 1;
+            db.TradeBots.Add(tradeBot);
+            db.SaveChanges();
             RunBot runBot = new RunBot(tradeBot, db, userId);
-            var botClient = new TelegramBotClient("742774159:AAEWX5b7ZYkorD5-L64apFG6PdIjs57MTYY");
+            var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
             botClient.SendTextMessageAsync(
               chatId: 542294321,
               text: "Created New Bot " + tradeBot.Name

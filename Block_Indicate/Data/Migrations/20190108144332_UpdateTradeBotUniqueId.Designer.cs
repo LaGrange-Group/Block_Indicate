@@ -4,14 +4,16 @@ using Block_Indicate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Block_Indicate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190108144332_UpdateTradeBotUniqueId")]
+    partial class UpdateTradeBotUniqueId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,10 +201,10 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<int>("NumberOfTrades");
 
                     b.Property<decimal>("PercentStopLoss")
-                        .HasColumnType("decimal(28, 18)");
+                        .HasColumnType("decimal(4, 4)");
 
                     b.Property<decimal>("PercentTakeProfit")
-                        .HasColumnType("decimal(28, 18)");
+                        .HasColumnType("decimal(4, 4)");
 
                     b.Property<bool>("Status");
 

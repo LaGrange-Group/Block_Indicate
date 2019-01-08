@@ -18,13 +18,14 @@ namespace Block_Indicate.Models
         public bool AllMarkets { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal AllocatedBitcoin { get; set; }
-        [Column(TypeName = "decimal(4, 4)")]
+        [Column(TypeName = "decimal(28, 18)")]
         public decimal PercentTakeProfit {get; set;}
-        [Column(TypeName = "decimal(4, 4)")]
+        [Column(TypeName = "decimal(28, 18)")]
         public decimal PercentStopLoss { get; set; }
         public string Exchange { get; set; }
         public string BaseCurrency { get; set; }
         public bool Status { get; set; }
+        public int UniqueSetId { get; set; }
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
