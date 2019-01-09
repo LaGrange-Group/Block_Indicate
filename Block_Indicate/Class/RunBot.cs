@@ -11,26 +11,27 @@ namespace Block_Indicate.Class
 {
     public class RunBot
     {
-        public RunBot(TradeBot tradeBot, ApplicationDbContext context, string userId)
+        public RunBot(TradeBot tradeBot, int custId)
         {
-            Run(userId, tradeBot);
+            Run(custId, tradeBot);
         }
-        public async Task Run(string userId, TradeBot tradeBotPass)
+        public async Task Run(int customerId, TradeBot tradeBotPass)
         {
             var startBot = Task.Run(async () => {
                 try
                 {
                     using (var db = new ApplicationDbContext())
                     {
+                        bool active = true;
                         TradeBot tradeBot = tradeBotPass;
                         DateTime nextTime = DateTime.Now;
                         int prevMaxResultId = db.Results.Max(r => r.Id);
-                        Customer customer = db.Customers.Where(c => c.UserId == userId).Single();
+                        Customer customer = db.Customers.Where(c => c.Id == customerId).Single();
                         TradeBot tradeBotUpdate = db.TradeBots.Where(b => b.UniqueSetId == tradeBot.UniqueSetId && b.CustomerId == customer.Id).Single();
                         int numActiveTrades = 0;
-                        while (true)
+                        while (active)
                         {
-
+                            active = CheckStatus(tradeBot.UniqueSetId);
                             if (DateTime.Now > nextTime)
                             {
                                 int highestId = db.Results.Max(r => r.Id);
@@ -58,7 +59,7 @@ namespace Block_Indicate.Class
                                             db.Update(tradeBotUpdate);
                                             db.SaveChanges();
                                             numActiveTrades++;
-                                            TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, userId, newResult);
+                                            TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, customerId, newResult);
                                             numActiveTrades--;
                                             tradeBotUpdate.NumberOfActiveTrades--;
                                             db.Update(tradeBotUpdate);
@@ -73,7 +74,7 @@ namespace Block_Indicate.Class
                                         db.Update(tradeBotUpdate);
                                         db.SaveChanges();
                                         numActiveTrades++;
-                                        TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, userId, newResult);
+                                        TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, customerId, newResult);
                                         numActiveTrades--;
                                         tradeBotUpdate.NumberOfActiveTrades--;
                                         db.Update(tradeBotUpdate);
@@ -87,6 +88,11 @@ namespace Block_Indicate.Class
                             }
                             System.Threading.Thread.Sleep(10000);
                         }
+                        var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
+                        botClient.SendTextMessageAsync(
+                            chatId: 542294321,
+                            text: "Shut Down Bot: " + tradeBot.Name
+                        );
                     }
                 }
                 catch (Exception e)
@@ -98,6 +104,23 @@ namespace Block_Indicate.Class
                     );
                 }
             });
+        }
+
+        private bool CheckStatus(int uniqueId)
+        {
+            try
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    bool active = db.TradeBots.Where(b => b.UniqueSetId == uniqueId).Select(b => b.Status).Single();
+                    return active;
+                }
+            }
+            catch
+            {
+                return CheckStatus(uniqueId);
+            }
+
         }
     }
 }

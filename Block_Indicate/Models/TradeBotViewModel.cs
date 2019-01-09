@@ -13,6 +13,7 @@ namespace Block_Indicate.Models
         public decimal EstimatedBTC { get; set; }
         public List<Tuple<string, decimal>> BinanceBalances { get; set; }
         public Dictionary<string, double> CurrentPrices { get; set; }
+        public List<TradeBot> TradeBots { get; set; }
         public TradeBot TradeBot { get; set; } 
     }
 }

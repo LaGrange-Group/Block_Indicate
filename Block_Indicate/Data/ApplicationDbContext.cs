@@ -18,6 +18,7 @@ namespace Block_Indicate.Data
         public DbSet<TradePerformance> TradePerformances { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<TradeBot> TradeBots { get; set; }
+        public DbSet<Trade> Trades { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

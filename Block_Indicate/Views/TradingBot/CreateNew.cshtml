@@ -1,0 +1,116 @@
+﻿@model Block_Indicate.Models.TradeBotViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<style>
+    #dashdiv {
+        border-radius: 10px;
+        background-color: #dedede;
+        width: 100%;
+        height: 220px;
+    }
+
+    li {
+        font-size: 16px;
+        padding-bottom: 1em;
+    }
+
+    #align-center {
+        display: flex;
+        align-items: center;
+    }
+
+    table {
+        overflow-y: scroll;
+        height: 120px;
+        display: block;
+    }
+    
+    td {
+        width: 10%;
+    }
+    /*#F2F2F2*/
+</style>
+<div class="container" style="padding-top:100px; width:30%; height:200px">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="modal-content" style="background-color:#dedede">
+            <div class="modal-header">
+                <center>
+                    <h2 style="padding-left:1em">Create New Bot</h2>
+                </center>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="dashdiv" style=" width:100%; height:850px; background-color:#dedede;">
+                                <div style="padding-left:2em; padding-right:2em" class="col-md-12">
+                                    <form asp-action="CreateNew">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="form-group">
+                                            <h3>Unique Name</h3>
+                                            <input asp-for="TradeBot.Name" class="form-control" placeholder="Enter a name..."/>
+                                            <span asp-validation-for="TradeBot.Name" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <h3>Signal Type</h3>
+                                            <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="TradeBot.Type" asp-items="ViewBag.Types">
+                                                <option disabled selected>--- SELECT ---</option>
+                                            </select>
+                                            <span asp-validation-for="TradeBot.Type" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <h3>Number of Trades</h3>
+                                            <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="TradeBot.NumberOfTrades" asp-items="ViewBag.NumberOfTrades">
+                                                <option disabled selected>--- SELECT ---</option>
+                                            </select>
+                                            <span asp-validation-for="TradeBot.Type" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <h3>All Markets</h3>
+                                            <input asp-for="TradeBot.AllMarkets" class="form-control" value="@(ViewBag.AllMarkets)"/>
+                                            <span asp-validation-for="TradeBot.AllMarkets" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <h3>Allocated Bitcoin</h3>
+                                            <input asp-for="TradeBot.AllocatedBitcoin" class="form-control" placeholder="1.50" value="@(ViewBag.TotalBTC)"/>
+                                            <span asp-validation-for="TradeBot.AllocatedBitcoin" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <h3>Percent Take Profit</h3>
+                                            <input asp-for="TradeBot.PercentTakeProfit" class="form-control"  placeholder="2.00" value="2.00"/>
+                                            <span asp-validation-for="TradeBot.PercentTakeProfit" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <h3>Percent Stop Loss</h3>
+                                            <input asp-for="TradeBot.PercentStopLoss" class="form-control" placeholder="-2.00" value="-2.00"/>
+                                            <span asp-validation-for="TradeBot.PercentStopLoss" class="text-danger"></span>
+                                        </div>
+                                        <div style="padding-bottom:2em" class="form-group">
+                                            <h3>Exchange</h3>
+                                            <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="TradeBot.Exchange" asp-items="ViewBag.Exchanges">
+                                                <option disabled selected>--- SELECT ---</option>
+                                            </select>
+                                            @*<span asp-validation-for="Exchange" class="text-danger"></span>*@
+                                        </div>
+                                        <center>
+                                            <div class="form-group">
+                                                <input style="width:75%" type="submit" value="Create" class="btn btn-primary" />
+                                            </div>
+                                        </center>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -46,6 +46,19 @@
             justify-content: center;
             align-items: center;
         }
+        .sidebar-nav > .sidebar-brand-mini {
+            height: 45px;
+            font-size: 15px;
+            line-height: 20px;
+        }
+            .sidebar-nav > .sidebar-brand-mini a {
+                color: #999999;
+            }
+
+                .sidebar-nav > .sidebar-brand-mini a:hover {
+                    color: #fff;
+                    background: none;
+                }
     </style>
 </head>
 <body>
@@ -70,13 +83,25 @@
                         </div>
                     </div>
                 </div>
-
-                <li class="sidebar-brand"><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
                 <li class="sidebar-brand">
                     <div class="row">
                         <div class="col-md-4" style="padding:0px">
                             <div style="float:right; padding:0px">
-                                <img src="https://i.imgur.com/dOoHk3j.png" style="height:35px; width:35px" />
+                                <img src="https://i.imgur.com/TfdU6oX.png" style="height:35px; width:35px" />
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding:0px">
+                            <div style="float:left; padding:0px">
+                                <a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar-brand">
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <div style="float:right; padding:0px">
+                                <img src="https://i.imgur.com/uI8lgRq.png" style="height:35px; width:35px" />
                             </div>
                         </div>
                         <div class="col-md-8" style="padding:0px">
@@ -86,8 +111,62 @@
                         </div>
                     </div>
                 </li>
-                <li class="sidebar-brand"><a asp-area="" asp-controller="Exchanges" asp-action="Create">Exchanges</a></li>
-                <li class="sidebar-brand"><a asp-area="" asp-controller="Doji" asp-action="Index">Doji Finder</a></li>
+                <li class="sidebar-brand-mini">
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <div style="float:right; padding:0px">
+                                <img src="https://i.imgur.com/rdKxLcA.png" style="height:20px; width:20px" />
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding:0px">
+                            <div style="float:left; padding:0px">
+                                <a asp-area="" asp-controller="TradingBot" asp-action="Index">Active Trades</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar-brand-mini">
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <div style="float:right; padding:0px">
+                                <img src="https://i.imgur.com/dgT4Z8E.png" style="height:20px; width:20px" />
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding:0px">
+                            <div style="float:left; padding:0px">
+                                <a asp-area="" asp-controller="TradingBot" asp-action="Index">Historical Trades</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar-brand">
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <div style="float:right; padding:0px">
+                                <img src="https://i.imgur.com/32owlQg.png" style="height:35px; width:35px" />
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding:0px">
+                            <div style="float:left; padding:0px">
+                                <a asp-area="" asp-controller="Exchanges" asp-action="Create">Exchanges</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar-brand">
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <div style="float:right; padding:0px">
+                                <img src="https://i.imgur.com/rxD5InL.png" style="height:35px; width:35px" />
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding:0px">
+                            <div style="float:left; padding:0px">
+                                <a asp-area="" asp-controller="Doji" asp-action="Index">Doji Finder</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
             </ul>
 
         </div>

@@ -99,7 +99,7 @@
         </div>
         <div class="col-md-2" style="height:10px">
             <div style=" margin-top:1.5em">
-                <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Etherium</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
+                <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Ethereum</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
             </div>
         </div>
         <div style="padding:0px; height:10px" class="col-md-4">
@@ -219,15 +219,18 @@
                         <table>
                             <tr>
                                 @*<th>Asset</th>
-                                <th>Amount</th>
-                                <th>Percent of Wallet</th>*@
+            <th>Amount</th>
+            <th>Percent of Wallet</th>*@
                             </tr>
                             @foreach (var row in Model.BinanceBalances)
                             {
-                            <tr>
-                                <td>@Html.Raw(row.Item1)</td>
-                                <td>@Html.Raw(row.Item2)</td>
-                            </tr>
+                                if (row.Item1 != "EstimatedBTC" && row.Item1 != "SBTC")
+                                {
+                                    <tr>
+                                        <td>@Html.Raw(row.Item1)</td>
+                                        <td>@Html.Raw(row.Item2)</td>
+                                    </tr>
+                                }
                             }
                         </table>
                     </div>
@@ -289,10 +292,10 @@
                         <strong>@Html.Raw(row.Symbol)</strong>
                     </td>
                     <td>
-                        <span class="badge badge-primary">@Html.Raw(row.LastPrice.ToString("0.########################"))</span>
+                        <span class="badge badge-inverse">@Html.Raw(row.LastPrice.ToString("0.########################"))</span>
                     </td>
                     <td>
-                        <span class="badge badge-primary">@Html.Raw(row.Vwap.ToString("0.########################"))</span>
+                        <span>@Html.Raw(row.Vwap.ToString("0.########################"))</span>
                     </td>
                     <td>
                         @if (row.PercentageChange > 0)
@@ -305,12 +308,13 @@
                         }
                     </td>
                     <td>
-                        <span class="badge badge-info">@Html.Raw(row.BitcoinVolume.ToString("0.##"))</span>
+                        <span>@Html.Raw(row.BitcoinVolume.ToString("0.##"))</span>
                     </td>
                     <td>
-                        @if (DateTime.Now - row.RealTime < new TimeSpan(0, 1, 0, 0, 0))
+                        <span>@Html.Raw(row.RealTime)</span>
+                        @*@if (DateTime.Now - row.RealTime < new TimeSpan(0, 1, 0, 0, 0))
                         {
-                            <span class="badge badge-success">@Html.Raw(row.RealTime)</span>
+
                         }
                         else if (DateTime.Now - row.RealTime < new TimeSpan(0, 2, 0, 0, 0))
                         {
@@ -319,7 +323,7 @@
                         else
                         {
                             <span class="badge badge-primary">@Html.Raw(row.RealTime)</span>
-                        }
+                        }*@
                     </td>
                 </tr>
                 }

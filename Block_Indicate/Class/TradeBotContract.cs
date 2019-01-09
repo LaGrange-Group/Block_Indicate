@@ -21,18 +21,22 @@ namespace Block_Indicate.Class
         private readonly ApplicationDbContext db;
         private string binanceApikey;
         private string binanceApiSecret;
-        public TradeBotContract(ApplicationDbContext context, TradeBot tradeBot, int numOfActiveTrades, string userId, Result market)
+        public TradeBotContract(ApplicationDbContext context, TradeBot tradeBot, int numOfActiveTrades, int customerId, Result market)
         {
             
             db = context;
-            Run(tradeBot, numOfActiveTrades, market, userId);
+            Run(tradeBot, numOfActiveTrades, market, customerId);
 
         }
-        public void Run(TradeBot tradeBot, int numOfActiveTrades, Result market, string userId)
+        public void Run(TradeBot tradeBot, int numOfActiveTrades, Result market, int customerId)
         {
             try
             {
-                Customer customer = db.Customers.Where(c => c.UserId == userId).Single();
+                Trade trade = new Trade();
+                trade.Symbol = market.Symbol;
+                trade.Exchange = tradeBot.Exchange;
+                trade.CustomerId = customerId;
+                Customer customer = db.Customers.Where(c => c.Id == customerId).Single();
                 binanceApikey = customer.BinanceApiKey;
                 binanceApiSecret = customer.BinanceApiSecret;
                 var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
@@ -69,6 +73,8 @@ namespace Block_Indicate.Class
                     decimal askPrice = Convert.ToDecimal(client.GetBookPrice(market.Symbol).Data.AskPrice.ToString("0.##############"));
                     int decimalCount = BitConverter.GetBytes(decimal.GetBits(askPrice)[3])[2];
                     decimal amount = Decimal.Round(freeBitcoin / askPrice, 0);
+                    trade.StartingBitcoinAmount = freeBitcoin;
+                    trade.Amount = amount;
                     var marketBuy = client.PlaceOrder(market.Symbol, OrderSide.Buy, OrderType.Market, amount);
                     if (marketBuy.Success)
                     {
@@ -76,6 +82,9 @@ namespace Block_Indicate.Class
                           chatId: 542294321,
                           text: "Successfuly Bought" + marketBuy.Data.Symbol + "At Price " + marketBuy.Data.Fills[0].Price.ToString()
                         );
+                        trade.BuyPrice = marketBuy.Data.Fills[0].Price;
+                        trade.StartDate = DateTime.Now;
+                        trade.Active = true;
                         decimal sellPrice = Decimal.Round(Convert.ToDecimal(((market.LastPrice * 0.02m) + market.LastPrice).ToString("0.#######################")), decimalCount);
                         string asset = market.Symbol.Remove(market.Symbol.Length - 3, 3);
                         decimal assetAmount = client.GetAccountInfo().Data.Balances.Where(a => a.Asset == asset).Select(a => a.Total).Single() + 500;
@@ -89,7 +98,8 @@ namespace Block_Indicate.Class
                               chatId: 542294321,
                               text: "Successfuly Set Take Profit At: " + amount.ToString() + "For " + market.Symbol + " At Price: " + sellPrice.ToString()
                             );
-                            ScanForConclusion(tradeBot, market, amount, decimalCount, orderId);
+                            trade.TakeProfit = sellPrice;
+                            ScanForConclusion(tradeBot, market, amount, decimalCount, orderId, trade);
                         }
                     }
                 }
@@ -104,11 +114,13 @@ namespace Block_Indicate.Class
             }
         }
 
-        private void ScanForConclusion(TradeBot tradeBot, Result market, decimal assetAmount, int decimalCount, long? orderId = null)
+        private void ScanForConclusion(TradeBot tradeBot, Result market, decimal assetAmount, int decimalCount, long? orderId, Trade trade)
         {
             try
             {
                 decimal stopLossPrice = Decimal.Round(market.LastPrice - (market.LastPrice * 0.10m), decimalCount);
+                trade.StopLoss = stopLossPrice;
+                AddTrade(trade);
                 bool active = true;
                 var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
                 botClient.SendTextMessageAsync(
@@ -122,7 +134,7 @@ namespace Block_Indicate.Class
                         // handle data
                         if (data.Data.Low < stopLossPrice)
                         {
-                            SellAtMarket(tradeBot, market, assetAmount, orderId);
+                            SellAtMarket(tradeBot, market, assetAmount, orderId, trade);
                             active = false;
                             return;
                         }
@@ -135,18 +147,20 @@ namespace Block_Indicate.Class
                         {
                             var orderStatus = clientRest.QueryOrder(market.Symbol, orderId);
 
-                            if (orderStatus.Data.Status == OrderStatus.Filled)
+                            if (orderStatus.Data.ExecutedQuantity == assetAmount)
                             {
-                                decimal percentGain = (orderStatus.Data.Price - market.LastPrice) / market.LastPrice * 100;
+                                decimal percentGain = (orderStatus.Data.Price - trade.BuyPrice) / trade.BuyPrice * 100;
                                 botClient.SendTextMessageAsync(
                                     chatId: 542294321,
                                     text: "--Trade Concluded-- \nCoin: " + market.Symbol + "\nGain: + " + percentGain + " %"
                                 );
+                                trade.SellPrice = orderStatus.Data.Price;
+                                UpdateTrade(trade);
                                 active = false;
                                 return;
                             }
                         }
-                        System.Threading.Thread.Sleep(10);
+                        System.Threading.Thread.Sleep(10000);
                     }
                 }
             }
@@ -159,7 +173,7 @@ namespace Block_Indicate.Class
                 );
             }
         }
-        private void SellAtMarket(TradeBot tradeBot, Result market, decimal assetAmount, long? orderId)
+        private void SellAtMarket(TradeBot tradeBot, Result market, decimal assetAmount, long? orderId, Trade trade)
         {
             try
             {
@@ -184,6 +198,8 @@ namespace Block_Indicate.Class
                                 chatId: 542294321,
                                 text: "--Trade Concluded-- \nCoin: " + market.Symbol + "\nLoss: + " + percentGain + " %"
                             );
+                            trade.SellPrice = sellMarket.Data.Fills[0].Price;
+                            UpdateTrade(trade);
                             return;
                         }
                     }
@@ -196,6 +212,27 @@ namespace Block_Indicate.Class
                     chatId: 542294321,
                     text: "Trade Contract Failure : Sell Stop Loss\nException: " + e
                 );
+            }
+        }
+        private void UpdateTrade(Trade trade)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                trade.EndingBitcoinAmount = trade.SellPrice * trade.Amount;
+                trade.FinalPercentageResult = Decimal.Round((trade.SellPrice - trade.BuyPrice) / trade.BuyPrice * 100, 2);
+                trade.Active = false;
+                trade.Closed = true;
+                trade.EndDate = DateTime.Now;
+                db.Update(trade);
+                db.SaveChanges();
+            }
+        }
+        private void AddTrade(Trade trade)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                db.Trades.Add(trade);
+                db.SaveChanges();
             }
         }
     }
