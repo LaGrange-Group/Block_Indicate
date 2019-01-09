@@ -15,5 +15,6 @@ namespace Block_Indicate.Models
         public Dictionary<string, double> CurrentPrices { get; set; }
         public List<TradeBot> TradeBots { get; set; }
         public TradeBot TradeBot { get; set; } 
+        public List<Trade> Trades { get; set; }
     }
 }

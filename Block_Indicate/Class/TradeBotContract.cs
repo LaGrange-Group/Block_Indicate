@@ -231,6 +231,7 @@ namespace Block_Indicate.Class
         {
             using (var db = new ApplicationDbContext())
             {
+                trade.RealTime = DateTime.Now;
                 db.Trades.Add(trade);
                 db.SaveChanges();
             }

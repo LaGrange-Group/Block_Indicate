@@ -89,6 +89,45 @@ namespace Block_Indicate.Controllers
             );
             return RedirectToAction("Index");
         }
+        public IActionResult ActiveTrades()
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                NavPrice navPrice = new NavPrice();
+                TradeBotViewModel tradeView = new TradeBotViewModel();
+                tradeView.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
+                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                tradeView.Customer = customer;
+                tradeView.CurrentPrices = navPrice.CurrentPrices();
+                return View(tradeView);
+            }
+            catch
+            {
+                return Index();
+            }
+        }
+        public IActionResult HistoricalTrades()
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                NavPrice navPrice = new NavPrice();
+                TradeBotViewModel tradeView = new TradeBotViewModel();
+                tradeView.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
+                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                tradeView.Customer = customer;
+                tradeView.CurrentPrices = navPrice.CurrentPrices();
+                return View(tradeView);
+            }
+            catch
+            {
+                return Index();
+            }
+            return View();
+        }
 
         public IActionResult DeleteBot(int botId)
         {
