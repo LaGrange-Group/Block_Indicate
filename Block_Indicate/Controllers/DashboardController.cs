@@ -19,30 +19,35 @@ namespace Block_Indicate.Controllers
         {
             db = context;
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
             try
             {
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
-                NavPrice navPrice = new NavPrice();
                 DateTime a = DateTime.Now;
                 DateTime prevDay = new DateTime(a.Year, a.Month, a.Day - 1, a.Hour, a.Minute, 0);
                 DashboardViewModel dashboard = new DashboardViewModel();
                 dashboard.Customer = customer;
-                dashboard.CurrentPrices = navPrice.CurrentPrices();
-                dashboard.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
-                dashboard.TotalBTC = dashboard.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
-                //dashboard.HuobiBalances = ExchangeApiKeys.HuobiConnection == true ? ExchangeApiKeys.GetAccountBalances("Huobi") : null;
                 dashboard.ValidDojiFourHoursBinance = db.TriggeredDojiFourHours.Where(d => d.RealTime > prevDay).ToList();
                 dashboard.ValidDoubleVolumesBinance = db.ValidDoubleVolumeBinance.Where(d => d.RealTime > prevDay).OrderByDescending(d => d.RealTime).ToList();
                 dashboard.TradePerformance = db.TradePerformances.FirstOrDefault();
+                dashboard.BinanceBalances = await binanceBalancesAsync;
+                dashboard.TotalBTC = dashboard.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                //dashboard.HuobiBalances = ExchangeApiKeys.HuobiConnection == true ? ExchangeApiKeys.GetAccountBalances("Huobi") : null;
+                dashboard.CurrentPrices = await currentPricesAsync;
                 return View(dashboard);
             }
             catch
             {
-                return Index();
+                return await Index();
             }
+
+
         }
     }
 }

@@ -79,6 +79,41 @@ namespace Block_Indicate.Class
             }
             return false;
         }
+        public static async Task<bool> AttemptConnectionAsync(string apiKey, string apiSecrect, string exchange)
+        {
+            if (exchange == "Binance")
+            {
+                BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+                {
+                    ApiCredentials = new ApiCredentials(apiKey, apiSecrect),
+                    LogVerbosity = LogVerbosity.Debug,
+                    LogWriters = new List<TextWriter> { Console.Out }
+                });
+                using (var client = new BinanceClient())
+                {
+                    var accountInfo = await client.GetAccountInfoAsync();
+                    if (accountInfo.Success)
+                    {
+                        await AddExchangeIfNotExistentAsync(exchange);
+                        return true;
+                    }
+                }
+            }
+            else if (exchange == "Huobi")
+            {
+                using (var client = new HuobiClient())
+                {
+                    client.SetApiCredentials(apiKey, apiSecrect);
+                    var accounts = await client.GetAccountsAsync();
+                    if (accounts.Success)
+                    {
+                        AddExchangeIfNotExistent(exchange);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         private static void AddExchangeIfNotExistent(string newExchange)
         {
@@ -95,7 +130,21 @@ namespace Block_Indicate.Class
                 activeExchanges.Add(newExchange);
             }
         }
-
+        private static async Task AddExchangeIfNotExistentAsync(string newExchange)
+        {
+            bool exists = false;
+            foreach (string exchange in activeExchanges)
+            {
+                if (exchange == newExchange)
+                {
+                    exists = true;
+                }
+            }
+            if (exists == false)
+            {
+                activeExchanges.Add(newExchange);
+            }
+        }
         public static List<Tuple<string, decimal>> GetAccountBalances(string exchange)
         {
             try
@@ -116,7 +165,6 @@ namespace Block_Indicate.Class
                             var balances = accountInfo.Data.Balances;
                             List<Tuple<string, decimal>> valid = new List<Tuple<string, decimal>>();
                             valid = valid.OrderBy(v => v.Item2).ToList();
-
                             foreach (var market in balances)
                             {
                                 if (market.Total > 0 || market.Asset == "BTC")
@@ -160,7 +208,75 @@ namespace Block_Indicate.Class
             }
         }
 
+        public static async Task<List<Tuple<string, decimal>>> GetAccountBalancesAsync(string exchange)
+        {
+            if (exchange == "Binance")
+            {
+                BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+                {
+                    ApiCredentials = new ApiCredentials(BinanceApiKey, BinanceApiSecret),
+                    LogVerbosity = LogVerbosity.Debug,
+                    LogWriters = new List<TextWriter> { Console.Out }
+                });
+                using (var client = new BinanceClient())
+                {
+                    var accountInfo = await client.GetAccountInfoAsync();
+                    if (accountInfo.Success)
+                    {
+                        var balances = accountInfo.Data.Balances;
+                        List<Tuple<string, decimal>> valid = new List<Tuple<string, decimal>>();
+                        valid = valid.OrderBy(v => v.Item2).ToList();
+
+                        foreach (var market in balances)
+                        {
+                            if (market.Total > 0 || market.Asset == "BTC")
+                            {
+                                Tuple<string, decimal> tuple = new Tuple<string, decimal>(market.Asset, market.Total);
+                                valid.Add(tuple);
+                            }
+                        }
+                         valid.Add(await GetEstimatedBTCAsync(valid));
+                        return valid;
+                    }
+                }
+            }
+            else if (exchange == "Huobi")
+            {
+                using (var client = new HuobiClient())
+                {
+                    client.SetApiCredentials(HuobiApiKey, HuobiApiSecret);
+                    var accounts = client.GetAccounts();
+                    var balances = client.GetBalances(accounts.Data[0].Id).Data;
+                    if (accounts.Success)
+                    {
+                        List<Tuple<string, decimal>> valid = new List<Tuple<string, decimal>>();
+                        foreach (var market in balances)
+                        {
+                            if (market.Balance > 0)
+                            {
+                                Tuple<string, decimal> tuple = new Tuple<string, decimal>(market.Currency, market.Balance);
+                                valid.Add(tuple);
+                            }
+                        }
+                        return valid;
+                    }
+                }
+            }
+            return null;
+        }
+
         private static Tuple<string, decimal> GetEstimatedBTC(List<Tuple<string, decimal>> balances)
+        {
+            decimal totalBTC = 0m;
+            foreach (Tuple<string, decimal> balance in balances)
+            {
+                decimal btcAmount = RetrieveBTCAmount(balance.Item1, balance.Item2);
+                totalBTC += btcAmount;
+            }
+            Tuple<string, decimal> tuple = new Tuple<string, decimal>("EstimatedBTC", totalBTC);
+            return tuple;
+        }
+        private static async Task<Tuple<string, decimal>> GetEstimatedBTCAsync(List<Tuple<string, decimal>> balances)
         {
             decimal totalBTC = 0m;
             foreach (Tuple<string, decimal> balance in balances)

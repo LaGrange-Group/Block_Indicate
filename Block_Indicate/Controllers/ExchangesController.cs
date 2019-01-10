@@ -25,24 +25,33 @@ namespace Block_Indicate.Controllers
             return View();
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
-            NavPrice navPrice = new NavPrice();
-            ApiConnectionViewModel apiConnection = new ApiConnectionViewModel();
-            apiConnection.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
-            apiConnection.TotalBTC = apiConnection.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
-            apiConnection.Customer = customer;
-            apiConnection.CurrentPrices = navPrice.CurrentPrices();
-            List<string> Exchanges = new List<string>() { "Binance", "Huobi" };
-            ViewBag.Exchanges = new SelectList(Exchanges);
-            return View(apiConnection);
+            try
+            {
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                List<string> Exchanges = new List<string>() { "Binance", "Huobi" };
+                ViewBag.Exchanges = new SelectList(Exchanges);
+                ApiConnectionViewModel apiConnection = new ApiConnectionViewModel();
+                apiConnection.Customer = customer;
+                apiConnection.BinanceBalances = await binanceBalancesAsync;
+                apiConnection.TotalBTC = apiConnection.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                apiConnection.CurrentPrices = await currentPricesAsync;
+                return View(apiConnection);
+            }
+            catch
+            {
+                return await Create();
+            }
         }
         [HttpPost]
-        public IActionResult Create(ApiConnectionViewModel apiInfo)
+        public async Task<IActionResult> Create(ApiConnectionViewModel apiInfo)
         {
-            if (ExchangeApiKeys.AttemptConnection(apiInfo.ApiKey, apiInfo.ApiSecrect, apiInfo.Exchange))
+            if (await ExchangeApiKeys.AttemptConnectionAsync(apiInfo.ApiKey, apiInfo.ApiSecrect, apiInfo.Exchange))
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Where(c => c.UserId == userId).Single();
@@ -58,7 +67,6 @@ namespace Block_Indicate.Controllers
                     customer.HuobiApiSecret = apiInfo.ApiSecrect;
                     customer.ConnectedHuobi = true;
                 }
-
                 db.Update(customer);
                 db.SaveChanges();
             }

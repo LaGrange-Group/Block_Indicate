@@ -21,51 +21,50 @@ namespace Block_Indicate.Controllers
         {
             db = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
+                TradeBotViewModel tradeView = new TradeBotViewModel();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
-                NavPrice navPrice = new NavPrice();
-                TradeBotViewModel tradeView = new TradeBotViewModel();
-                tradeView.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
-                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
-                tradeView.TotalBTC = Decimal.Round(Convert.ToDecimal(tradeView.BinanceBalances.Where(b => b.Item1 == "BTC").Select(b => b.Item2).Single().ToString("0.###########")), 5);
                 tradeView.Customer = customer;
                 tradeView.TradeBots = db.TradeBots.Where(b => b.CustomerId == customer.Id).ToList();
-                tradeView.CurrentPrices = navPrice.CurrentPrices();
+                tradeView.BinanceBalances = await binanceBalancesAsync;
+                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                tradeView.TotalBTC = Decimal.Round(Convert.ToDecimal(tradeView.BinanceBalances.Where(b => b.Item1 == "BTC").Select(b => b.Item2).Single().ToString("0.###########")), 5);
+                tradeView.CurrentPrices = await currentPricesAsync;
                 return View(tradeView);
             }
             catch
             {
-                return Index();
+                return await Index();
             }
 
         }
-        public IActionResult CreateNew()
+        public async Task<IActionResult> CreateNew()
         {
-            //TradeBotViewModel tradeView = new TradeBotViewModel();
-            //tradeView.TradeBot = new TradeBot();
-            //tradeView.TradeBot.AllMarkets = true;
-            //tradeView.TradeBot.AllocatedBitcoin = tradeView.TotalBTC;
-            //tradeView.TradeBot.PercentTakeProfit = 2;
-            //tradeView.TradeBot.PercentStopLoss = -10;
-            //tradeView.TradeBot.Exchange = "Binance";
-            //tradeView.TradeBot.Type = "All";
-            //tradeView.TradeBot.NumberOfTrades = 1;
-            //tradeView.TradeBot.Name = "Davids Bot";
-            List<Tuple<string, decimal>> binanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
-            ViewBag.TotalBTC = Decimal.Round(Convert.ToDecimal(binanceBalances.Where(b => b.Item1 == "BTC").Select(b => b.Item2).Single().ToString("0.###########")), 5);
-            List<string> Exchanges = new List<string>() { "Binance", "Huobi" };
-            List<string> Types = new List<string>() { "All", "Double Volume", "Four Hour Doji's" };
-            List<int> NumberOfTrades = new List<int>() { 1, 2, 3, 4 };
-            ViewBag.AllMarkets = true;
-            ViewBag.Exchanges = new SelectList(Exchanges);
-            ViewBag.Types = new SelectList(Types);
-            ViewBag.NumberOfTrades = new SelectList(NumberOfTrades);
-            return PartialView();
-
+            try
+            {
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                List<string> Exchanges = new List<string>() { "Binance", "Huobi" };
+                List<string> Types = new List<string>() { "All", "Double Volume", "Four Hour Doji's" };
+                List<int> NumberOfTrades = new List<int>() { 1, 2, 3, 4 };
+                ViewBag.AllMarkets = true;
+                ViewBag.Exchanges = new SelectList(Exchanges);
+                ViewBag.Types = new SelectList(Types);
+                ViewBag.NumberOfTrades = new SelectList(NumberOfTrades);
+                List<Tuple<string, decimal>> binanceBalances = await binanceBalancesAsync;
+                ViewBag.TotalBTC = Decimal.Round(Convert.ToDecimal(binanceBalances.Where(b => b.Item1 == "BTC").Select(b => b.Item2).Single().ToString("0.###########")), 5);
+                return PartialView();
+            }
+            catch
+            {
+                return await CreateNew();
+            }
         }
         [HttpPost]
         public IActionResult CreateNew(TradeBot tradeBot)
@@ -89,82 +88,87 @@ namespace Block_Indicate.Controllers
             );
             return RedirectToAction("Index");
         }
-        public IActionResult ActiveTrades()
+        public async Task<IActionResult> ActiveTrades()
         {
             try
             {
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
-                NavPrice navPrice = new NavPrice();
                 TradeBotViewModel tradeView = new TradeBotViewModel();
-                tradeView.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
-                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
                 tradeView.Customer = customer;
-                tradeView.CurrentPrices = navPrice.CurrentPrices();
+                tradeView.Trades = db.Trades.Where(t => t.Active == true).ToList();
+                tradeView.BinanceBalances = await binanceBalancesAsync;
+                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                tradeView.CurrentPrices = await currentPricesAsync;
                 return View(tradeView);
             }
             catch
             {
-                return Index();
+                return await ActiveTrades();
             }
         }
-        public IActionResult HistoricalTrades()
+        public async Task<IActionResult> HistoricalTrades()
         {
             try
             {
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
-                NavPrice navPrice = new NavPrice();
                 TradeBotViewModel tradeView = new TradeBotViewModel();
-                tradeView.BinanceBalances = ExchangeApiKeys.BinanceConnection == true ? ExchangeApiKeys.GetAccountBalances("Binance") : null;
-                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
                 tradeView.Customer = customer;
-                tradeView.CurrentPrices = navPrice.CurrentPrices();
+                tradeView.Trades = db.Trades.Where(t => t.Active == true).ToList();
+                tradeView.BinanceBalances = await binanceBalancesAsync;
+                tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                tradeView.CurrentPrices = await currentPricesAsync;
                 return View(tradeView);
             }
             catch
             {
-                return Index();
+                return await HistoricalTrades();
             }
-            return View();
         }
 
-        public IActionResult DeleteBot(int botId)
+        public async Task<IActionResult> DeleteBot(int botId)
         {
             TradeBot bot = db.TradeBots.Where(b => b.Id == botId).Single();
             if (bot.Status == true)
             {
-                ShutOffBot(botId);
+                await ShutOffBot(botId);
             }
             db.TradeBots.Remove(bot);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        private void ShutOffBot(int botId)
+        private async Task ShutOffBot(int botId)
         {
             TradeBot bot = db.TradeBots.Where(b => b.Id == botId).Single();
             bot.Status = !bot.Status;
             db.Update(bot);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
-        public IActionResult SwitchBotPower(int botId)
+        public async Task<IActionResult> SwitchBotPower(int botId)
         {
             TradeBot bot = db.TradeBots.Where(b => b.Id == botId).Single();
             bot.Status = !bot.Status;
             db.Update(bot);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             if (bot.Status == true)
             {
-                StartExistingBot(bot);
+                await StartExistingBot(bot);
             }
             return RedirectToAction("Index");
         }
 
-        private void StartExistingBot(TradeBot tradeBot)
+        private async Task StartExistingBot(TradeBot tradeBot)
         {
             RunBot runBot = new RunBot(tradeBot, tradeBot.CustomerId);
             var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-            botClient.SendTextMessageAsync(
+            await botClient.SendTextMessageAsync(
               chatId: 542294321,
               text: "Started Bot " + tradeBot.Name
             );

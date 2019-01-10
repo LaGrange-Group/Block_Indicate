@@ -27,6 +27,21 @@ namespace Block_Indicate.Class
                 return CurrentPrices();
             }
         }
+        public async Task<Dictionary<string, double>> CurrentPricesAsync()
+        {
+            Dictionary<string, double> currentPrices = new Dictionary<string, double>();
+            using (var client = new BinanceClient())
+            {
+                var btcA = await client.GetPriceAsync("BTCUSDT");
+                var ethA = await client.GetPriceAsync("ETHUSDT");
+                double btc = Convert.ToDouble(btcA.Data.Price);
+                double eth = Convert.ToDouble(ethA.Data.Price);
+                currentPrices.Add("btc", btc);
+                currentPrices.Add("eth", eth);
+            }
+            return currentPrices;
+        }
+
         //public static void CountUntilNextMin(DateTime nextTime)
         //{
         //    do
