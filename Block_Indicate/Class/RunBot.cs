@@ -25,7 +25,8 @@ namespace Block_Indicate.Class
                         bool active = true;
                         TradeBot tradeBot = tradeBotPass;
                         DateTime nextTime = DateTime.Now;
-                        int prevMaxResultId = db.Results.Max(r => r.Id);
+                        List<Result> results = db.Results.Where(r => r.BitcoinVolumeOriginal > 200 && r.RealTime.Hour >= 3 && r.RealTime.Hour <= 9 && r.Symbol != "HOTBTC" && r.LastPrice > 0.00000140m).ToList();
+                        int prevMaxResultId = results.Max(r => r.Id);
                         Customer customer = db.Customers.Where(c => c.Id == customerId).Single();
                         TradeBot tradeBotUpdate = db.TradeBots.Where(b => b.UniqueSetId == tradeBot.UniqueSetId && b.CustomerId == customer.Id).Single();
                         int numActiveTrades = 0;
@@ -34,13 +35,14 @@ namespace Block_Indicate.Class
                             active = CheckStatus(tradeBot.UniqueSetId);
                             if (DateTime.Now > nextTime)
                             {
-                                int highestId = db.Results.Max(r => r.Id);
+                                results = db.Results.Where(r => r.BitcoinVolumeOriginal > 200 && r.RealTime.Hour >= 3 && r.RealTime.Hour <= 9 && r.Symbol != "HOTBTC" && r.LastPrice > 0.00000140m).ToList();
+                                int highestId = results.Max(r => r.Id);
                                 bool isNew = highestId > prevMaxResultId ? true : false;
                                 List<Result> newResults;
                                 Result newResult = new Result();
                                 if (isNew)
                                 {
-                                    newResults = db.Results.Where(r => r.Id > prevMaxResultId).ToList();
+                                    newResults = results.Where(r => r.Id > prevMaxResultId).ToList();
                                     if (newResults.Count > 1)
                                     {
                                         decimal highestVolume = newResults.Max(r => r.BitcoinVolumeOriginal);
