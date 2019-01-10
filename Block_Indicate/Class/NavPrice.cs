@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Binance.Net;
+using Block_Indicate.Data;
+using Block_Indicate.Models;
+
 namespace Block_Indicate.Class
 {
     public class NavPrice
@@ -40,6 +43,29 @@ namespace Block_Indicate.Class
                 currentPrices.Add("eth", eth);
             }
             return currentPrices;
+        }
+        public async Task<bool> UpdateActiveTrades(int customerId)
+        {
+            List<Trade> trades;
+            using (var db = new ApplicationDbContext())
+            {
+                trades = db.Trades.Where(t => t.Active == true && t.CustomerId == customerId).ToList();
+                foreach (Trade trade in trades)
+                {
+                    using (var client = new BinanceClient())
+                    {
+                        var current = await client.Get24HPriceAsync(trade.Symbol);
+                        if (current.Success)
+                        {
+                            trade.CurrentPrice = current.Data.LastPrice;
+                            trade.TimeActive = (DateTime.Now - trade.StartDate).ToString();
+                        }
+                    }
+                    db.Update(trade);
+                    await db.SaveChangesAsync();
+                }
+                return true;
+            }
         }
 
         //public static void CountUntilNextMin(DateTime nextTime)

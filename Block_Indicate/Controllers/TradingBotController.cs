@@ -28,9 +28,9 @@ namespace Block_Indicate.Controllers
                 Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
                 NavPrice navPrice = new NavPrice();
                 Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
-                TradeBotViewModel tradeView = new TradeBotViewModel();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                TradeBotViewModel tradeView = new TradeBotViewModel();
                 tradeView.Customer = customer;
                 tradeView.TradeBots = db.TradeBots.Where(b => b.CustomerId == customer.Id).ToList();
                 tradeView.BinanceBalances = await binanceBalancesAsync;
@@ -97,12 +97,14 @@ namespace Block_Indicate.Controllers
                 Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                Task<bool> updatePriceAsync = navPrice.UpdateActiveTrades(customer.Id);
                 TradeBotViewModel tradeView = new TradeBotViewModel();
                 tradeView.Customer = customer;
                 tradeView.Trades = db.Trades.Where(t => t.Active == true).ToList();
                 tradeView.BinanceBalances = await binanceBalancesAsync;
                 tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
                 tradeView.CurrentPrices = await currentPricesAsync;
+                bool success = await updatePriceAsync;
                 return View(tradeView);
             }
             catch
@@ -121,7 +123,7 @@ namespace Block_Indicate.Controllers
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
                 TradeBotViewModel tradeView = new TradeBotViewModel();
                 tradeView.Customer = customer;
-                tradeView.Trades = db.Trades.Where(t => t.Active == true).ToList();
+                tradeView.Trades = db.Trades.Where(t => t.Active == false).ToList();
                 tradeView.BinanceBalances = await binanceBalancesAsync;
                 tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
                 tradeView.CurrentPrices = await currentPricesAsync;

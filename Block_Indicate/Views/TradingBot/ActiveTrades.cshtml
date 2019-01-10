@@ -148,7 +148,7 @@
                     <strong>@Html.Raw(row.Symbol)</strong>
                 </td>
                 <td>
-                    @Html.Raw(row.BuyPrice.ToString("0.###############"))
+                    @Html.Raw(row.CurrentPrice.ToString("0.###############"))
                 </td>
                 <td>
                     @Html.Raw(row.TakeProfit.ToString("0.###############"))
@@ -159,11 +159,11 @@
                 <td>
                     @if (row.CurrentPercentageResult < 0)
                     {
-                        <span style="color:red">@Html.Raw(row.CurrentPercentageResult.ToString("0.###############")) %</span>
+                        <span style="color:red">@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")) %</span>
                     }
                     else
                     {
-                        <span style="color:green">+ @Html.Raw(row.CurrentPercentageResult.ToString("0.###############")) %</span>
+                        <span style="color:green">+ @Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")) %</span>
                     }
                 </td>
                 <td>

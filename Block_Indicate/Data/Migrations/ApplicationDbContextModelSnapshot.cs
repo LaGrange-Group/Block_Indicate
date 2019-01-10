@@ -196,6 +196,9 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("CurrentPercentageResult")
                         .HasColumnType("decimal(28, 18)");
 
+                    b.Property<decimal>("CurrentPrice")
+                        .HasColumnType("decimal(28, 18)");
+
                     b.Property<int>("CustomerId");
 
                     b.Property<DateTime?>("EndDate");

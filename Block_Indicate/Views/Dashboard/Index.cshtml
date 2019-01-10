@@ -134,7 +134,7 @@
             <hr />
             <ul>
                 <li>
-                    Trading Bot
+                    Huobi Integration
                 </li>
                 <li>
                     Doji Finder
@@ -151,10 +151,10 @@
             <hr />
             <ul>
                 <li>
-                    Dashboard
+                    Trading Bot
                 </li>
                 <li>
-                    Dynamic Price Header
+                    Trade Monitoring
                 </li>
                 <li>
                     Double Volume + 4 Hour Doji's
@@ -167,7 +167,16 @@
         <div id="dashdiv">
             <h4 style="padding-top:1em; padding-left:1em">Active Bots</h4>
             <hr />
-
+            <div style="position:absolute; top:4.5em; left:9em">
+                <center>
+                    <div>
+                        <span style="font-size:5.5em; color:#747474"><span style="color:#86c689">@Html.Raw(Model.ActiveBots.ToString())</span>/<span></span>@Html.Raw(Model.BotsTotal.ToString())</span>
+                    </div>
+                    <div>
+                        @Html.ActionLink("Manage", "Index", "TradingBot", null, new { @class = "btn btn-danger btn-large", style = "width:150px;" })
+                    </div>
+                </center>
+            </div>
         </div>
     </div>
     <div class="col-md-3">
@@ -243,7 +252,11 @@
     </div>
     <div class="col-md-4">
         <div id="dashdiv" style=" width:100%; height:200px; background-color:#dedede">
-
+            <div style="padding-top:4em">
+                <center>
+                    <h1 style="color:#ededed; font-size:4em">Huobi Integration</h1>
+                </center>
+            </div>
         </div>
     </div>
 </div>

@@ -33,6 +33,8 @@ namespace Block_Indicate.Controllers
                 DateTime prevDay = new DateTime(a.Year, a.Month, a.Day - 1, a.Hour, a.Minute, 0);
                 DashboardViewModel dashboard = new DashboardViewModel();
                 dashboard.Customer = customer;
+                dashboard.ActiveBots = db.TradeBots.Where(b => b.CustomerId == customer.Id && b.Status == true).ToList().Count;
+                dashboard.BotsTotal = db.TradeBots.Where(b => b.CustomerId == customer.Id).ToList().Count;
                 dashboard.ValidDojiFourHoursBinance = db.TriggeredDojiFourHours.Where(d => d.RealTime > prevDay).ToList();
                 dashboard.ValidDoubleVolumesBinance = db.ValidDoubleVolumeBinance.Where(d => d.RealTime > prevDay).OrderByDescending(d => d.RealTime).ToList();
                 dashboard.TradePerformance = db.TradePerformances.FirstOrDefault();

@@ -107,7 +107,49 @@
             if (i < 8)
             {
 
-                @if (i == 1)
+                @if (i == 0)
+                {
+                    <div class="col-md-3">
+                        <div id="dashdiv">
+                            <center>
+                                <h3>@Html.Raw(Model.TradeBots[i].Name)</h3>
+                            </center>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 id="leftPad">Trade Type: <strong>@Html.Raw(Model.TradeBots[i].Type)</strong></h4>
+                                    <h4 id="leftPad">Async Trades: <strong>@Html.Raw(Model.TradeBots[i].NumberOfTrades.ToString())</strong></h4>
+                                    <h4 id="leftPad">All Markets: <strong>@Html.Raw(Model.TradeBots[i].AllMarkets.ToString())</strong></h4>
+                                    <h4 id="leftPad">Base: <strong>Bitcoin</strong></h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>Bitcoin: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[i].AllocatedBitcoin, 5).ToString("0.###########"))</strong></h4>
+                                    <h4>Take Profit: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[i].PercentTakeProfit, 2).ToString()) %</strong></h4>
+                                    <h4>Stop Loss: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[i].PercentStopLoss, 2).ToString()) %</strong></h4>
+                                    <h4>Exchange: <strong>@Html.Raw(Model.TradeBots[i].Exchange)</strong></h4>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:0.5em">
+                                <div class="col-md-6">
+                                    @if (Model.TradeBots[i].Status == true)
+                                    {
+                                        @Html.ActionLink("Deactivate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[i].Id }, new { @class = "btn btn-warning btn-large", style = "width:150px; float:right" })
+
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Activate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[i].Id }, new { @class = "btn btn-success btn-large", style = "width:150px; float:right" })
+
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.ActionLink("Delete", "DeleteBot", "TradingBot", new { botId = Model.TradeBots[i].Id }, new { @class = "btn btn-danger btn-large", style = "width:150px; float:left" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (i == 1)
                 {
                     <div class="col-md-3">
                         <div id="dashdiv">
@@ -171,48 +213,6 @@
                                     <h4>Exchange: <strong>@Html.Raw(Model.TradeBots[i].Exchange)</strong></h4>
                                 </div>
                             </div>
-                            <div class="row" style="padding-top:0.5em">
-                                <div class="col-md-6">
-                                    @if (Model.TradeBots[i].Status == true)
-                                    {
-                                        @Html.ActionLink("Deactivate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[i].Id }, new { @class = "btn btn-warning btn-large", style = "width:150px; float:right" })
-
-                                    }
-                                    else
-                                    {
-                                        @Html.ActionLink("Activate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[i].Id }, new { @class = "btn btn-success btn-large", style = "width:150px; float:right" })
-
-                                    }
-                                </div>
-                                <div class="col-md-6">
-                                    @Html.ActionLink("Delete", "DeleteBot", "TradingBot", new { botId = Model.TradeBots[i].Id }, new { @class = "btn btn-danger btn-large", style = "width:150px; float:left" })
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-                else if (i == 3)
-                {
-                    <div class="col-md-3">
-                        <div id="dashdiv">
-                            <center>
-                                <h3>@Html.Raw(Model.TradeBots[i].Name)</h3>
-                            </center>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4 id="leftPad">Trade Type: <strong>@Html.Raw(Model.TradeBots[i].Type)</strong></h4>
-                                    <h4 id="leftPad">Async Trades: <strong>@Html.Raw(Model.TradeBots[i].NumberOfTrades.ToString())</strong></h4>
-                                    <h4 id="leftPad">All Markets: <strong>@Html.Raw(Model.TradeBots[i].AllMarkets.ToString())</strong></h4>
-                                    <h4 id="leftPad">Base: <strong>Bitcoin</strong></h4>
-                                </div>
-                                <div class="col-md-6">
-                                    <h4>Bitcoin: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[i].AllocatedBitcoin, 5).ToString("0.###########"))</strong></h4>
-                                    <h4>Take Profit: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[i].PercentTakeProfit, 2).ToString()) %</strong></h4>
-                                    <h4>Stop Loss: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[i].PercentStopLoss, 2).ToString()) %</strong></h4>
-                                    <h4>Exchange: <strong>@Html.Raw(Model.TradeBots[i].Exchange)</strong></h4>
-                                </div>
-                            </div>
                             <div class="row" style="padding-top:1.5em">
                                 <div class="col-md-6">
                                     @if (Model.TradeBots[i].Status == true)
@@ -233,7 +233,7 @@
                         </div>
                     </div>
                 }
-                else if (i == 4)
+                else if (i == 3)
                 {
                     <div class="col-md-3">
                         <div id="dashdiv">
@@ -284,7 +284,49 @@
             if (j < 8)
             {
 
-                @if (j == 5)
+                @if (j == 4)
+                {
+        <div class="col-md-3">
+            <div id="dashdiv">
+                <center>
+                    <h3>@Html.Raw(Model.TradeBots[j].Name)</h3>
+                </center>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 id="leftPad">Trade Type: <strong>@Html.Raw(Model.TradeBots[j].Type)</strong></h4>
+                        <h4 id="leftPad">Async Trades: <strong>@Html.Raw(Model.TradeBots[j].NumberOfTrades.ToString())</strong></h4>
+                        <h4 id="leftPad">All Markets: <strong>@Html.Raw(Model.TradeBots[j].AllMarkets.ToString())</strong></h4>
+                        <h4 id="leftPad">Base: <strong>Bitcoin</strong></h4>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Bitcoin: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[j].AllocatedBitcoin, 5).ToString("0.###########"))</strong></h4>
+                        <h4>Take Profit: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[j].PercentTakeProfit, 2).ToString()) %</strong></h4>
+                        <h4>Stop Loss: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[j].PercentStopLoss, 2).ToString()) %</strong></h4>
+                        <h4>Exchange: <strong>@Html.Raw(Model.TradeBots[j].Exchange)</strong></h4>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:0.5em">
+                    <div class="col-md-6">
+                        @if (Model.TradeBots[j].Status == true)
+                        {
+                            @Html.ActionLink("Deactivate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[j].Id }, new { @class = "btn btn-warning btn-large", style = "width:150px; float:right" })
+
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Activate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[j].Id }, new { @class = "btn btn-success btn-large", style = "width:150px; float:right" })
+
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @Html.ActionLink("Delete", "DeleteBot", "TradingBot", new { botId = Model.TradeBots[j].Id }, new { @class = "btn btn-danger btn-large", style = "width:150px; float:left" })
+                    </div>
+                </div>
+            </div>
+        </div>
+                }
+                else if (j == 5)
                 {
         <div class="col-md-3">
             <div id="dashdiv">
@@ -369,48 +411,6 @@
         </div>
                 }
                 else if (j == 7)
-                {
-        <div class="col-md-3">
-            <div id="dashdiv">
-                <center>
-                    <h3>@Html.Raw(Model.TradeBots[j].Name)</h3>
-                </center>
-                <hr />
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 id="leftPad">Trade Type: <strong>@Html.Raw(Model.TradeBots[j].Type)</strong></h4>
-                        <h4 id="leftPad">Async Trades: <strong>@Html.Raw(Model.TradeBots[j].NumberOfTrades.ToString())</strong></h4>
-                        <h4 id="leftPad">All Markets: <strong>@Html.Raw(Model.TradeBots[j].AllMarkets.ToString())</strong></h4>
-                        <h4 id="leftPad">Base: <strong>Bitcoin</strong></h4>
-                    </div>
-                    <div class="col-md-6">
-                        <h4>Bitcoin: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[j].AllocatedBitcoin, 5).ToString("0.###########"))</strong></h4>
-                        <h4>Take Profit: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[j].PercentTakeProfit, 2).ToString()) %</strong></h4>
-                        <h4>Stop Loss: <strong>@Html.Raw(Decimal.Round(Model.TradeBots[j].PercentStopLoss, 2).ToString()) %</strong></h4>
-                        <h4>Exchange: <strong>@Html.Raw(Model.TradeBots[j].Exchange)</strong></h4>
-                    </div>
-                </div>
-                <div class="row" style="padding-top:0.5em">
-                    <div class="col-md-6">
-                        @if (Model.TradeBots[j].Status == true)
-                        {
-                            @Html.ActionLink("Deactivate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[j].Id }, new { @class = "btn btn-warning btn-large", style = "width:150px; float:right" })
-
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Activate", "SwitchBotPower", "TradingBot", new { botId = Model.TradeBots[j].Id }, new { @class = "btn btn-success btn-large", style = "width:150px; float:right" })
-
-                        }
-                    </div>
-                    <div class="col-md-6">
-                        @Html.ActionLink("Delete", "DeleteBot", "TradingBot", new { botId = Model.TradeBots[j].Id }, new { @class = "btn btn-danger btn-large", style = "width:150px; float:left" })
-                    </div>
-                </div>
-            </div>
-        </div>
-                }
-                else if (j == 8)
                 {
         <div class="col-md-3">
             <div id="dashdiv">

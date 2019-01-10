@@ -14,6 +14,8 @@ namespace Block_Indicate.Models
         public string Symbol { get; set; }
         public string Exchange { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
+        public decimal CurrentPrice { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
         public decimal BuyPrice { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal SellPrice { get; set; }
