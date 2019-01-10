@@ -157,7 +157,7 @@
                     @Html.Raw(row.StopLoss.ToString("0.###############"))
                 </td>
                 <td>
-                    @if (row.CurrentPercentageResult < 0)
+                    @if ((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100 < 0)
                     {
                         <span style="color:red">@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")) %</span>
                     }
@@ -170,7 +170,7 @@
                     @Html.Raw(row.Amount.ToString("0.###############"))
                 </td>
                 <td>
-                    @Html.Raw(row.TimeActive)
+                    @Html.Raw(row.TimeActive))
                 </td>
                 <td>
                     @Html.Raw(row.StartDate)
