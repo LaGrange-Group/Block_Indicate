@@ -25,8 +25,8 @@ namespace Block_Indicate.Class
                         bool active = true;
                         TradeBot tradeBot = tradeBotPass;
                         DateTime nextTime = DateTime.Now;
-                        List<Result> results = db.Results.Where(r => r.BitcoinVolumeOriginal > 200 && r.RealTime.Hour >= 3 && r.RealTime.Hour <= 9 && r.Symbol != "HOTBTC" && r.LastPrice > 0.00000140m).ToList();
-                        int prevMaxResultId = results.Max(r => r.Id);
+                        List<Result> results = db.Results.ToList();
+                        int prevMaxResultId = results.Max(r => r.Id) - 1;
                         Customer customer = db.Customers.Where(c => c.Id == customerId).Single();
                         TradeBot tradeBotUpdate = db.TradeBots.Where(b => b.UniqueSetId == tradeBot.UniqueSetId && b.CustomerId == customer.Id).Single();
                         int numActiveTrades = 0;
@@ -35,7 +35,7 @@ namespace Block_Indicate.Class
                             active = CheckStatus(tradeBot.UniqueSetId);
                             if (DateTime.Now > nextTime)
                             {
-                                results = db.Results.Where(r => r.BitcoinVolumeOriginal > 200 && r.RealTime.Hour >= 3 && r.RealTime.Hour <= 9 && r.Symbol != "HOTBTC" && r.LastPrice > 0.00000140m).ToList();
+                                results = db.Results.ToList();
                                 int highestId = results.Max(r => r.Id);
                                 bool isNew = highestId > prevMaxResultId ? true : false;
                                 List<Result> newResults;
@@ -93,7 +93,7 @@ namespace Block_Indicate.Class
                         var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
                         await botClient.SendTextMessageAsync(
                             chatId: 542294321,
-                            text: "Shut Down Bot: " + tradeBot.Name
+                            text: "Shut Down Bot " + tradeBot.Name
                         );
                     }
                 }

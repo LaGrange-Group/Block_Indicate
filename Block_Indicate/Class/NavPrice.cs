@@ -54,11 +54,13 @@ namespace Block_Indicate.Class
                 {
                     using (var client = new BinanceClient())
                     {
+                        DateTime a = DateTime.Now;
+                        DateTime dateTime = new DateTime(a.Year, a.Month, a.Day, a.Hour, a.Minute, 00);
                         var current = await client.Get24HPriceAsync(trade.Symbol);
                         if (current.Success)
                         {
                             trade.CurrentPrice = current.Data.LastPrice;
-                            trade.TimeActive = (DateTime.Now - trade.StartDate).ToString();
+                            trade.TimeActive = (dateTime - trade.StartDate).ToString();
                         }
                     }
                     db.Update(trade);

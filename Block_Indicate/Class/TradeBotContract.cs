@@ -80,7 +80,7 @@ namespace Block_Indicate.Class
                     {
                         botClient.SendTextMessageAsync(
                           chatId: 542294321,
-                          text: "Successfuly Bought" + marketBuy.Data.Symbol + "At Price " + marketBuy.Data.Fills[0].Price.ToString()
+                          text: "Successfuly Bought " + marketBuy.Data.Symbol + " At Price " + marketBuy.Data.Fills[0].Price.ToString()
                         );
                         trade.BuyPrice = marketBuy.Data.Fills[0].Price;
                         trade.StartDate = DateTime.Now;
@@ -96,7 +96,7 @@ namespace Block_Indicate.Class
                             long? orderId = sellLimitOrder.Data.OrderId;
                             botClient.SendTextMessageAsync(
                               chatId: 542294321,
-                              text: "Successfuly Set Take Profit At: " + amount.ToString() + "For " + market.Symbol + " At Price: " + sellPrice.ToString()
+                              text: "Successfuly set take profit for " + amount.ToString() + " " + market.Symbol + " at price " + sellPrice.ToString()
                             );
                             trade.TakeProfit = sellPrice;
                             ScanForConclusion(tradeBot, market, amount, decimalCount, orderId, trade);

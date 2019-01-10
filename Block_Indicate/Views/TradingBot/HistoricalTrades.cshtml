@@ -98,7 +98,7 @@
             </div>
             <div class="col-md-2">
                 <center>
-                    <h3>Price</h3>
+                    <h3>Sell Price</h3>
                 </center>
             </div>
             <div class="col-md-1">
@@ -112,19 +112,19 @@
                 </center>
             </div>
             <div class="col-md-1" style="padding:0px">
-                <h3 style="float:left">Percent</h3>
+                <h3 style="float:left">Final</h3>
             </div>
             <div class="col-md-1" style="padding:0px">
                 <h3 style="float:right">Amount</h3>
             </div>
             <div class="col-md-2">
                 <center>
-                    <h3>Time</h3>
+                    <h3>Total Time</h3>
                 </center>
             </div>
             <div class="col-md-2">
                 <center>
-                    <h3>Start Time</h3>
+                    <h3>End Time</h3>
                 </center>
             </div>
         </div>
@@ -156,13 +156,13 @@
                         @Html.Raw(row.StopLoss.ToString("0.###############"))
                     </td>
                     <td>
-                        @if (row.CurrentPercentageResult < 0)
+                        @if ((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100 < 0)
                         {
-                            <span style="color:red">@Html.Raw(row.CurrentPercentageResult.ToString("0.###############")) %</span>
+                        <span style="color:red">@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")) %</span>
                         }
                         else
                         {
-                            <span style="color:green">+ @Html.Raw(row.CurrentPercentageResult.ToString("0.###############")) %</span>
+                        <span style="color:green">+ @Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")) %</span>
                         }
                     </td>
                     <td>

@@ -76,11 +76,19 @@ namespace Block_Indicate.Controllers
             // - Bitcoin Enough for amount of trades
             // - AllMarkets True
             tradeBot.CustomerId = customer.Id;
-            tradeBot.Status = true;
-            tradeBot.UniqueSetId = tradeBots.Count > 0 ? tradeBots.Count + 1 : 1;
+            tradeBot.Status = false;
+            int maxId;
+            try
+            {
+                maxId = db.TradeBots.Max(t => t.Id);
+            }catch
+            {
+                maxId = 1;
+            }
+            tradeBot.UniqueSetId = maxId + 1;
             db.TradeBots.Add(tradeBot);
             db.SaveChanges();
-            RunBot runBot = new RunBot(tradeBot, tradeBot.CustomerId);
+            //RunBot runBot = new RunBot(tradeBot, tradeBot.CustomerId);
             var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
             botClient.SendTextMessageAsync(
               chatId: 542294321,
@@ -121,6 +129,7 @@ namespace Block_Indicate.Controllers
                 Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                Task<bool> updatePriceAsync = navPrice.UpdateActiveTrades(customer.Id);
                 TradeBotViewModel tradeView = new TradeBotViewModel();
                 tradeView.Customer = customer;
                 tradeView.Trades = db.Trades.Where(t => t.Active == false).ToList();
@@ -174,6 +183,11 @@ namespace Block_Indicate.Controllers
               chatId: 542294321,
               text: "Started Bot " + tradeBot.Name
             );
+        }
+
+        public IActionResult BarChart()
+        {
+            return View();
         }
 
     }
