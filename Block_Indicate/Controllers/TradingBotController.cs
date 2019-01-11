@@ -185,9 +185,19 @@ namespace Block_Indicate.Controllers
             );
         }
 
-        public IActionResult BarChart()
+        public async Task<IActionResult> SellMarket(int tradeId)
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+            Trade trade = db.Trades.Where(t => t.Id == tradeId).Single();
+            bool sell = await Sell.Market(trade.Symbol, trade.Amount, customer);
+            if (sell == true)
+            {
+                trade.Active = false;
+                db.Update(trade);
+                await db.SaveChangesAsync();
+            }
+            return RedirectToAction("ActiveTrades");
         }
 
     }
