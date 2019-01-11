@@ -31,7 +31,7 @@
 
     table {
         overflow-y: hidden;
-        height: 800px;
+        height: 200px;
         display: block;
         border-collapse:inherit;
         border-spacing: 3em;
@@ -87,100 +87,130 @@
     </div>
 </div>
 <br />
-
-<div class="row" style="padding:0px">
-    <div class="col-md-1">
-
-    </div>
-    <div class="col-md-10">
-        <div class="row">
-            <div class="col-md-1" style="padding:0px">
-                <h3 style="float:right">Symbol</h3>
-            </div>
-            <div class="col-md-2">
-                <center>
-                    <h3>Price</h3>
-                </center>
-            </div>
-            <div class="col-md-1">
-                <center>
-                    <h3>Take</h3>
-                </center>
-            </div>
-            <div class="col-md-2">
-                <center>
-                    <h3>Stop</h3>
-                </center>
-            </div>
-            <div class="col-md-1" style="padding:0px">
-                    <h3 style="float:left">Percent</h3>
-            </div>
-            <div class="col-md-1" style="padding:0px">
-                    <h3 style="float:right">Amount</h3>
-            </div>
-            <div class="col-md-2">
-                <center>
-                    <h3>Time</h3>
-                </center>
-            </div>
-            <div class="col-md-2">
-                <center>
-                    <h3>Start Time</h3>
-                </center>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-1">
-
-    </div>
-</div>
+<center>
+    <h2>Active Trades</h2>
+</center>
 <hr style="padding-bottom:0px"/>
 <div class="row">
     <div class="col-md-1">
 
     </div>
     <div class="col-md-10">
-        <table>
-            @foreach (var row in Model.Trades)
-            {
-            <tr  style="border-bottom:1px solid black">
-                <td>
-                    <strong>@Html.Raw(row.Symbol)</strong>
-                </td>
-                <td>
-                    @Html.Raw(row.CurrentPrice.ToString("0.###############"))
-                </td>
-                <td>
-                    @Html.Raw(row.TakeProfit.ToString("0.###############"))
-                </td>
-                <td>
-                    @Html.Raw(row.StopLoss.ToString("0.###############"))
-                </td>
-                <td>
-                    @if ((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100 < 0)
+
+        @foreach (var row in Model.Trades)
+        {
+
+            <div class="row">
+                <div class="col-md-3" style="padding:0px;height:100px;">
+                    <div>
+                        <h3 style="float:left">@Html.Raw(row.Symbol)</h3>
+                    </div>
+                    <br />
+                    <p style="float:right; padding-top:2.1em">@Html.Raw(row.StopLoss.ToString("0.###############"))</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        @if (Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2) < 0)
+                        {
+                            <div class="col-md-4" style="padding-right:0px">
+                                <div style="height:15px; float:right; width:@Decimal.Round((((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) * -1) + 5, 2).ToString("0.#############")%">
+                                    <span style="float:right; color:red">@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############"))%</span><br />
+                                    <span style="float:right;">Price:@Html.Raw(row.CurrentPrice.ToString("0.###############"))</span>
+                                </div>
+                            </div>
+                            <div class="col-md-8" style="padding-left:0px">
+                                <div style="height:15px; float:left; width:0%; padding-left:0px">
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-4" style="padding-right:0px">
+                                <div style="height:15px; float:right; width:0%">
+
+                                </div>
+                            </div>
+                            <div class="col-md-8" style="padding-left:0px">
+                                <div style="height:15px; float:left; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) + 5, 2).ToString("0.#############")%; padding-left:0px">
+                                    <span style="float:right; color:green"> +@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############"))%</span><br />
+                                    <span style="float:right;">Price:@Html.Raw(row.CurrentPrice.ToString("0.###############"))</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <br />
+                    @if (Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2) < 0)
                     {
-                        <span style="color:red">@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")) %</span>
+
+
+                        <div style="width:100%; padding-top:5px;">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-right:0px">
+                                    <div style="height:15px; border-left:2px solid gray; float:right; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) * -1, 2).ToString("0.#############")%">
+
+                                    </div>
+                                </div>
+                                <div class="col-md-8" style="padding-left:0px">
+                                    <div style="height:15px; border-right:0px solid gray; float:left; width:0%">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
                     else
                     {
-                        <span style="color:green">+ @Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")) %</span>
+                        <div style="width:100%; padding-top:5px;">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-right:0px">
+                                    <div style="height:15px; border-left:0px solid gray; float:right; width:0%">
+
+                                    </div>
+                                </div>
+                                <div class="col-md-8" style="padding-left:0px">
+                                    <div style="height:15px; border-right:2px solid gray; float:left; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")%">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
-                </td>
-                <td>
-                    @Html.Raw(row.Amount.ToString("0.###############"))
-                </td>
-                <td>
-                    @Html.Raw(row.TimeActive)
-                </td>
-                <td>
-                    @Html.Raw(row.StartDate)
-                </td>
-            </tr>
-            }
-        </table>
+
+                    <div style="width:100%; height:10px; border:1px solid lightgray; border-radius:5px;">
+                        <div class="row">
+                            <div class="col-md-4" style="padding-right:0px">
+                                <div style=" height:8px; background-color:#da1e1e; border-radius:5px 0px 0px 5px; float:right; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) * -1, 2).ToString("0.#############")%">
+
+                                </div>
+                            </div>
+                            <div class="col-md-8" style="padding-left:0px">
+                                <div style="border-left:4px solid lightgray; height:8px">
+                                    <div style=" height:8px; background-color:#60bb4b; border-radius:0px 5px 5px 0px; float:left; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")%;">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3" style="padding:0px;height:100px;">
+                    <br />
+                    <p style="float:left; padding-top:2.1em">@Html.Raw(row.TakeProfit.ToString("0.###############"))</p>
+                    <div class="row">
+                        <div class="col-md-6" style="padding-top:2em; float:right">
+                            <center>
+                                @Html.ActionLink("Sell Market", "SellMarket", "TradingBot", new { tradId = row.Id }, new { @class = "btn btn-warning btn-large", style = "width:100px; float:right;" })
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
     <div class="col-md-1">
 
     </div>
 </div>
 <hr />
+
