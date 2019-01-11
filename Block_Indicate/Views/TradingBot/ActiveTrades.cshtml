@@ -102,18 +102,33 @@
 
             <div class="row">
                 <div class="col-md-3" style="padding:0px;height:100px;">
-                    <div>
-                        <h3 style="float:left">@Html.Raw(row.Symbol)</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div style="padding-top:0.2em">
+                                <h3 style="float:left">@Html.Raw(row.Symbol)</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="padding-top:3.5em">
+                                <center>
+                                    <p>@Html.Raw(row.Amount.ToString("0.###########"))</p>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div  style="padding-top:3.5em">
+                                <span style="float:right; ">@Html.Raw(row.StopLoss.ToString("0.###############"))</span>
+                            </div>
+                        </div>
                     </div>
                     <br />
-                    <p style="float:right; padding-top:2.1em">@Html.Raw(row.StopLoss.ToString("0.###############"))</p>
                 </div>
                 <div class="col-md-6">
                     <div class="row">
-                        @if (Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2) < 0)
+                        @if (row.CurrentPrice - row.BuyPrice < 0)
                         {
                             <div class="col-md-4" style="padding-right:0px">
-                                <div style="height:15px; float:right; width:@Decimal.Round((((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) * -1) + 5, 2).ToString("0.#############")%">
+                                <div style="height:15px; float:right; width:@Decimal.Round(row.CurrentPercentageResult).ToString("0.#############")%">
                                     <span style="float:right; color:red">@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############"))%</span><br />
                                     <span style="float:right;">Price:@Html.Raw(row.CurrentPrice.ToString("0.###############"))</span>
                                 </div>
@@ -132,7 +147,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8" style="padding-left:0px">
-                                <div style="height:15px; float:left; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) + 5, 2).ToString("0.#############")%; padding-left:0px">
+                                <div style="height:15px; float:left; width:@Decimal.Round(row.CurrentPercentageResult).ToString("0.#############")%; padding-left:0px">
                                     <span style="float:right; color:green"> +@Html.Raw(Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############"))%</span><br />
                                     <span style="float:right;">Price:@Html.Raw(row.CurrentPrice.ToString("0.###############"))</span>
                                 </div>
@@ -140,14 +155,14 @@
                         }
                     </div>
                     <br />
-                    @if (Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2) < 0)
+                    @if (row.CurrentPrice - row.BuyPrice < 0)
                     {
 
 
                         <div style="width:100%; padding-top:5px;">
                             <div class="row">
                                 <div class="col-md-4" style="padding-right:0px">
-                                    <div style="height:15px; border-left:2px solid gray; float:right; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) * -1, 2).ToString("0.#############")%">
+                                    <div style="height:15px; border-left:2px solid gray; float:right; width:@Decimal.Round(row.CurrentPercentageResult).ToString("0.#############")%">
 
                                     </div>
                                 </div>
@@ -169,30 +184,52 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8" style="padding-left:0px">
-                                    <div style="height:15px; border-right:2px solid gray; float:left; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")%">
+                                    <div style="height:15px; border-right:2px solid gray; float:left; width:@Decimal.Round(row.CurrentPercentageResult).ToString("0.#############")%">
 
                                     </div>
                                 </div>
                             </div>
                         </div>
                     }
+                    @if (row.CurrentPrice - row.BuyPrice < 0)
+                    {
+                        <div style="width:100%; height:10px; border:1px solid lightgray; border-radius:5px;">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-right:0px">
+                                    <div style=" height:8px; background-color:#da1e1e; border-radius:5px 0px 0px 5px; float:right; width:@Decimal.Round(row.CurrentPercentageResult).ToString("0.#############")%">
 
-                    <div style="width:100%; height:10px; border:1px solid lightgray; border-radius:5px;">
-                        <div class="row">
-                            <div class="col-md-4" style="padding-right:0px">
-                                <div style=" height:8px; background-color:#da1e1e; border-radius:5px 0px 0px 5px; float:right; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100) * -1, 2).ToString("0.#############")%">
-
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-8" style="padding-left:0px">
-                                <div style="border-left:4px solid lightgray; height:8px">
-                                    <div style=" height:8px; background-color:#60bb4b; border-radius:0px 5px 5px 0px; float:left; width:@Decimal.Round(((row.CurrentPrice - row.BuyPrice) / row.BuyPrice * 100), 2).ToString("0.#############")%;">
+                                <div class="col-md-8" style="padding-left:0px">
+                                    <div style="border-left:4px solid lightgray; height:8px">
+                                        <div style=" height:8px; background-color:#60bb4b; border-radius:0px 5px 5px 0px; float:left; width:0%;">
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div style="width:100%; height:10px; border:1px solid lightgray; border-radius:5px;">
+                            <div class="row">
+                                <div class="col-md-4" style="padding-right:0px">
+                                    <div style=" height:8px; background-color:#da1e1e; border-radius:5px 0px 0px 5px; float:right; width:0%">
+
+                                    </div>
+                                </div>
+                                <div class="col-md-8" style="padding-left:0px">
+                                    <div style="border-left:4px solid lightgray; height:8px">
+                                        <div style=" height:8px; background-color:#60bb4b; border-radius:0px 5px 5px 0px; float:left; width:@Decimal.Round(row.CurrentPercentageResult).ToString("0.#############")%;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
                 </div>
                 <div class="col-md-3" style="padding:0px;height:100px;">
                     <br />

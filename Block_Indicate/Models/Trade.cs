@@ -26,6 +26,12 @@ namespace Block_Indicate.Models
         [Column(TypeName = "decimal(28, 18)")]
         public decimal Amount { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
+        public decimal DiffFromStopLoss { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal DiffFromTakeProfit { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal CurrentDiff { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
         public decimal StartingBitcoinAmount { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal EndingBitcoinAmount { get; set; }

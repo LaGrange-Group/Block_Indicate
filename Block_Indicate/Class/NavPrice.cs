@@ -60,6 +60,11 @@ namespace Block_Indicate.Class
                         if (current.Success)
                         {
                             trade.CurrentPrice = current.Data.LastPrice;
+                            trade.DiffFromStopLoss = trade.StopLoss - trade.BuyPrice;
+                            trade.DiffFromTakeProfit = trade.TakeProfit - trade.BuyPrice;
+                            trade.CurrentDiff = trade.CurrentPrice - trade.BuyPrice;
+                            trade.CurrentPercentageResult = trade.CurrentPrice - trade.BuyPrice < 0 ? trade.CurrentDiff / trade.DiffFromStopLoss * 100 : trade.CurrentDiff / trade.DiffFromTakeProfit * 100;
+                            trade.CurrentPercentageResult = trade.CurrentPercentageResult * 1m;
                             trade.TimeActive = (dateTime - trade.StartDate).ToString();
                         }
                     }
