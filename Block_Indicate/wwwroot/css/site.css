@@ -12,6 +12,7 @@ body {
     padding-right: 15px;
 }
 
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
@@ -34,4 +35,56 @@ body {
     .carousel-caption {
         display: none;
     }
+}
+.dropbtn {
+    background-color: #ffffff;
+    background-image: url("https://pngimage.net/wp-content/uploads/2018/06/logo-menu-png-6.png");
+    background-size: cover;
+    color: white;
+    padding: 1em;
+    padding-bottom: 1.5em;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    padding-right: 2em;
+    outline: none;
+}
+
+    .dropbtn:hover, .dropbtn:focus {
+        background-image: url("https://i.imgur.com/ZfcE5MY.png");
+    }
+
+.dropdown {
+    padding-top: 0.9em;
+    padding-right: 2em;
+    float: right;
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #282741;
+    border-radius: 20px;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    right: 0;
+    z-index: 1;
+}
+
+    .dropdown-content a {
+        color: #999999;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+.dropdown a:hover {
+    color: white;
+}
+
+.show {
+    display: block;
 }

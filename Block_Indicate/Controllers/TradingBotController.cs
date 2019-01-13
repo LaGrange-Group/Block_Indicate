@@ -102,17 +102,18 @@ namespace Block_Indicate.Controllers
             {
                 Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
                 NavPrice navPrice = new NavPrice();
+ 
                 Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
-                Task<bool> updatePriceAsync = navPrice.UpdateActiveTrades(customer.Id);
                 TradeBotViewModel tradeView = new TradeBotViewModel();
                 tradeView.Customer = customer;
+                UpdateTrades updateTrades = new UpdateTrades();
+                updateTrades.Update(customer.Id);
                 tradeView.Trades = db.Trades.Where(t => t.Active == true).ToList();
                 tradeView.BinanceBalances = await binanceBalancesAsync;
                 tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
                 tradeView.CurrentPrices = await currentPricesAsync;
-                bool success = await updatePriceAsync;
                 return View(tradeView);
             }
             catch
@@ -132,7 +133,7 @@ namespace Block_Indicate.Controllers
                 Task<bool> updatePriceAsync = navPrice.UpdateActiveTrades(customer.Id);
                 TradeBotViewModel tradeView = new TradeBotViewModel();
                 tradeView.Customer = customer;
-                tradeView.Trades = db.Trades.Where(t => t.Active == false).ToList();
+                tradeView.Trades = db.Trades.Where(t => t.Active == false).OrderByDescending(t => t.EndDate).ToList();
                 tradeView.BinanceBalances = await binanceBalancesAsync;
                 tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
                 tradeView.CurrentPrices = await currentPricesAsync;
@@ -190,8 +191,9 @@ namespace Block_Indicate.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
             Trade trade = db.Trades.Where(t => t.Id == tradeId).Single();
-            bool sell = await Sell.Market(trade.Symbol, trade.Amount, customer);
-            if (sell == true)
+            Sell sell = new Sell();
+            bool success = await sell.MarketAsync(trade, customer);
+            if (success == true)
             {
                 trade.Active = false;
                 db.Update(trade);

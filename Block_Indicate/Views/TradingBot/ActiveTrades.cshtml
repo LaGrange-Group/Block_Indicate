@@ -5,6 +5,59 @@
 
 
 <style>
+    .dropbtn {
+        background-color: #ffffff;
+        background-image: url("https://pngimage.net/wp-content/uploads/2018/06/logo-menu-png-6.png");
+        background-size: cover;
+        color: white;
+        padding: 1em;
+        padding-bottom: 1.5em;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        padding-right: 2em;
+        outline: none;
+    }
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-image: url("https://i.imgur.com/ZfcE5MY.png");
+        }
+
+    .dropdown {
+        padding-top: 0.9em;
+        padding-right: 2em;
+        float: right;
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #282741;
+        border-radius: 20px;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        right: 0;
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            font-size: 1.2em;
+            color: #999999;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        color: white;
+    }
+
+    .show {
+        display: block;
+    }
     #dashdiv {
         border-radius: 10px;
         background-color: #dedede;
@@ -24,6 +77,7 @@
     #leftPad {
         padding-left: 1em;
     }
+
     #align-center {
         display: flex;
         align-items: center;
@@ -33,9 +87,9 @@
         overflow-y: hidden;
         height: 200px;
         display: block;
-        border-collapse:inherit;
+        border-collapse: inherit;
         border-spacing: 3em;
-        padding-top:0px;
+        padding-top: 0px;
     }
 
     td {
@@ -80,7 +134,15 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-
+                    <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn" style="width:2em; height:2em"></button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a asp-area="" asp-controller="Customers" asp-action="Profile">Profile</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Billing">Billing</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Settings">Settings</a>
+                            <a asp-area="" asp-controller="Identity/Account/" asp-action="Login">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,7 +152,7 @@
 <center>
     <h2>Active Trades</h2>
 </center>
-<hr style="padding-bottom:0px"/>
+<hr style="padding-bottom:0px" />
 <div class="row">
     <div class="col-md-1">
 
@@ -104,8 +166,9 @@
                 <div class="col-md-3" style="padding:0px;height:100px;">
                     <div class="row">
                         <div class="col-md-4">
-                            <div style="padding-top:0.2em">
-                                <h3 style="float:left">@Html.Raw(row.Symbol)</h3>
+                            <span style="font-size:1em"><strong>@Html.Raw(row.Name)</strong></span>
+                            <div style="padding-top:0.3em">
+                                <h3 style="float:left; padding:0px">@Html.Raw(row.Symbol)</h3>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -116,7 +179,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div  style="padding-top:3.5em">
+                            <div style="padding-top:3.5em">
                                 <span style="float:right; ">@Html.Raw(row.StopLoss.ToString("0.###############"))</span>
                             </div>
                         </div>
@@ -235,7 +298,7 @@
                     <br />
                     <p style="float:left; padding-top:2.1em">@Html.Raw(row.TakeProfit.ToString("0.###############"))</p>
                     <div class="row">
-                        <div class="col-md-6" style="padding-top:2em; float:right">
+                        <div class="col-md-6" style="padding-top:1.5em; float:right">
                             <center>
                                 @Html.ActionLink("Sell Market", "SellMarket", "TradingBot", new { tradeId = row.Id }, new { @class = "btn btn-warning btn-large", style = "width:100px; float:right;" })
                             </center>
@@ -250,4 +313,5 @@
     </div>
 </div>
 <hr />
+
 

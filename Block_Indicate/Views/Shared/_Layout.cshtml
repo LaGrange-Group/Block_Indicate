@@ -101,6 +101,20 @@
                     <div class="row">
                         <div class="col-md-4" style="padding:0px">
                             <div style="float:right; padding:0px">
+                                <img src="https://i.imgur.com/4yZAMIn.png" style="height:35px; width:35px" />
+                            </div>
+                        </div>
+                        <div class="col-md-8" style="padding:0px">
+                            <div style="float:left; padding:0px">
+                                <a asp-area="" asp-controller="Dashboard" asp-action="Index">Smart Trade</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="sidebar-brand">
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <div style="float:right; padding:0px">
                                 <img src="https://i.imgur.com/uI8lgRq.png" style="height:35px; width:35px" />
                             </div>
                         </div>
@@ -209,4 +223,25 @@
 
     @RenderSection("Scripts", required: false)
 </body>
+<script>
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
 </html>

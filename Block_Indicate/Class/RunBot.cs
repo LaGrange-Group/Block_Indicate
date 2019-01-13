@@ -61,7 +61,7 @@ namespace Block_Indicate.Class
                                             db.Update(tradeBotUpdate);
                                             db.SaveChanges();
                                             numActiveTrades++;
-                                            TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, customerId, newResult);
+                                            TradeContract botContract = new TradeContract(db, tradeBot, numActiveTrades, customerId, newResult);
                                             numActiveTrades--;
                                             tradeBotUpdate.NumberOfActiveTrades--;
                                             db.Update(tradeBotUpdate);
@@ -76,7 +76,7 @@ namespace Block_Indicate.Class
                                         db.Update(tradeBotUpdate);
                                         db.SaveChanges();
                                         numActiveTrades++;
-                                        TradeBotContract botContract = new TradeBotContract(db, tradeBot, numActiveTrades, customerId, newResult);
+                                        TradeContract botContract = new TradeContract(db, tradeBot, numActiveTrades, customerId, newResult);
                                         numActiveTrades--;
                                         tradeBotUpdate.NumberOfActiveTrades--;
                                         db.Update(tradeBotUpdate);

@@ -4,6 +4,61 @@
 }
 @*position: absolute; top:0; right:0; left:0; float:right*@
 <style>
+
+    .dropbtn {
+        background-color: #ffffff;
+        background-image: url("https://pngimage.net/wp-content/uploads/2018/06/logo-menu-png-6.png");
+        background-size:cover;
+        color: white;
+        padding: 1em;
+        padding-bottom:1.5em;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        padding-right:2em;
+        outline:none;
+    }
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-image: url("https://i.imgur.com/ZfcE5MY.png");
+        }
+
+    .dropdown {
+        padding-top:0.9em;
+        padding-right: 2em;
+        float: right;
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #282741;
+        border-radius:20px;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        right: 0;
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            font-size: 1.2em;
+            color: #999999;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        color: white;
+    }
+
+    .show {
+        display: block;
+    }
+
     #dashdiv {
         border-radius: 10px;
         background-color: #dedede;
@@ -117,7 +172,15 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-
+                    <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn" style="width:2em; height:2em"></button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a asp-area="" asp-controller="Customers" asp-action="Profile">Profile</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Billing">Billing</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Settings">Settings</a>
+                            <a asp-area="" asp-controller="Identity/Account/" asp-action="Login">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

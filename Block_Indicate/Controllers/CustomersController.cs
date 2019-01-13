@@ -8,48 +8,90 @@ using Microsoft.EntityFrameworkCore;
 using Block_Indicate.Data;
 using Block_Indicate.Models;
 using System.Security.Claims;
+using Block_Indicate.Class;
 
 namespace Block_Indicate.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext db;
 
         public CustomersController(ApplicationDbContext context)
         {
-            _context = context;
+            db = context;
         }
-
-        // GET: Customers
-        public async Task<IActionResult> Index()
+      
+        public async Task<IActionResult> Profile()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
+            try
             {
-                return NotFound();
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                CustomerViewModel customerView = new CustomerViewModel();
+                customerView.Customer = customer;
+                customerView.BinanceBalances = await binanceBalancesAsync;
+                customerView.EstimatedBTC = customerView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                customerView.TotalBTC = Decimal.Round(Convert.ToDecimal(customerView.BinanceBalances.Where(b => b.Item1 == "BTC").Select(b => b.Item2).Single().ToString("0.###########")), 5);
+                customerView.CurrentPrices = await currentPricesAsync;
+                return View(customerView);
+            }
+            catch
+            {
+                return await Profile();
             }
 
-            var customer = await _context.Customers
-                .Include(c => c.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
+        }
+        public async Task<IActionResult> Billing()
+        {
+            try
             {
-                return NotFound();
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                CustomerViewModel customerView = new CustomerViewModel();
+                customerView.Customer = customer;
+                customerView.BinanceBalances = await binanceBalancesAsync;
+                customerView.EstimatedBTC = customerView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                customerView.TotalBTC = Decimal.Round(Convert.ToDecimal(customerView.BinanceBalances.Where(b => b.Item1 == "BTC").Select(b => b.Item2).Single().ToString("0.###########")), 5);
+                customerView.CurrentPrices = await currentPricesAsync;
+                return View(customerView);
             }
-
-            return View(customer);
+            catch
+            {
+                return await Billing();
+            }
+        }
+        public async Task<IActionResult> Settings()
+        {
+            try
+            {
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                CustomerViewModel customerView = new CustomerViewModel();
+                customerView.Customer = customer;
+                customerView.BinanceBalances = await binanceBalancesAsync;
+                customerView.EstimatedBTC = customerView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
+                customerView.TotalBTC = Decimal.Round(Convert.ToDecimal(customerView.BinanceBalances.Where(b => b.Item1 == "BTC").Select(b => b.Item2).Single().ToString("0.###########")), 5);
+                customerView.CurrentPrices = await currentPricesAsync;
+                return View(customerView);
+            }
+            catch
+            {
+                return await Billing();
+            }
         }
 
-        // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            ViewData["UserId"] = new SelectList(db.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -65,100 +107,13 @@ namespace Block_Indicate.Controllers
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 customer.UserId = userId;
                 customer.CompletedSignUp = true;
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                db.Add(customer);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index","Dashboard");
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.UserId);
+            ViewData["UserId"] = new SelectList(db.ApplicationUsers, "Id", "Id", customer.UserId);
             return RedirectToAction("Index", "Dashboard");
         }
 
-        // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.UserId);
-            return View(customer);
-        }
-
-        // POST: Customers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,PhoneNumber,BinanceApiKey,BinanceApiSecret,HuobiApiKey,HuobiApiSecret,AccountActive,AccountTrial,CompletedSignUp,TrialStartDate,PaidStartDate,UserId")] Customer customer)
-        {
-            if (id != customer.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", customer.UserId);
-            return View(customer);
-        }
-
-        // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var customer = await _context.Customers
-                .Include(c => c.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
-        }
-
-        // POST: Customers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.Id == id);
-        }
     }
 }

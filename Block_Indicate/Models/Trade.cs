@@ -11,6 +11,8 @@ namespace Block_Indicate.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Name { get; set; }
+        public long? OrderId { get; set; }
         public string Symbol { get; set; }
         public string Exchange { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
@@ -43,8 +45,8 @@ namespace Block_Indicate.Models
         public string TimeToCompletion { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public string Type { get; set; }
         public bool Active { get; set; }
-        public bool Closed { get; set; }
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }

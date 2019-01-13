@@ -191,8 +191,6 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("BuyPrice")
                         .HasColumnType("decimal(28, 18)");
 
-                    b.Property<bool>("Closed");
-
                     b.Property<decimal>("CurrentDiff")
                         .HasColumnType("decimal(28, 18)");
 
@@ -220,6 +218,10 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("FinalPercentageResult")
                         .HasColumnType("decimal(28, 18)");
 
+                    b.Property<string>("Name");
+
+                    b.Property<long?>("OrderId");
+
                     b.Property<DateTime>("RealTime");
 
                     b.Property<decimal>("SellPrice")
@@ -241,6 +243,8 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<string>("TimeActive");
 
                     b.Property<string>("TimeToCompletion");
+
+                    b.Property<string>("Type");
 
                     b.HasKey("Id");
 

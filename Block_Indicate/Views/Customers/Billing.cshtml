@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewData["Title"] = "Billing";
+}
+
+<style>
+
+    .dropbtn {
+        background-color: #ffffff;
+        background-image: url("https://pngimage.net/wp-content/uploads/2018/06/logo-menu-png-6.png");
+        background-size: cover;
+        color: white;
+        padding: 1em;
+        padding-bottom: 1.5em;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        padding-right: 2em;
+        outline: none;
+    }
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-image: url("https://i.imgur.com/ZfcE5MY.png");
+        }
+
+    .dropdown {
+        padding-top: 0.9em;
+        padding-right: 2em;
+        float: right;
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #282741;
+        border-radius: 20px;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        right: 0;
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            font-size: 1.2em;
+            color: #999999;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        color: white;
+    }
+
+    .show {
+        display: block;
+    }
+
+    #dashdiv {
+        border-radius: 10px;
+        background-color: #dedede;
+        width: 100%;
+        height: 220px;
+    }
+
+    li {
+        font-size: 16px;
+        padding-bottom: 1em;
+        color: #747474
+    }
+
+    #align-center {
+        display: flex;
+        align-items: center;
+    }
+</style>
+<div style="height:5em; position: absolute; top:0; right:0; left:17.8em; border-bottom:2px solid black">
+    <div class="row">
+        <div class="col-md-2" style="height:10px">
+            <div style="padding-top:1.5em">
+                <span style="padding-left:2em"><span style="font-size:1.5em">BTC: </span><span style="font-size:1.2em">@Html.Raw(Model.EstimatedBTC.ToString("0.######"))</span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px; padding:0px">
+            <div style="padding-top:1.5em; float:left">
+                <span><span style="font-size:1.5em">USD: </span><span style="font-size:1.2em">$@Html.Raw((Model.EstimatedBTC * Convert.ToDecimal(Model.CurrentPrices["btc"])).ToString("0.##"))</span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px">
+            <div style="margin-top:1.5em; float:right">
+                <span><strong style="font-size:1.5em;">BTC</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:1.5em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["btc"])</strong></span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px">
+            <div style=" margin-top:1.5em">
+                <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Ethereum</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
+            </div>
+        </div>
+        <div style="padding:0px; height:10px" class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <center>
+                        <div style=" padding-top:0.5em">
+                            <img style="height:55px; width:55px; float:right;" src="https://i.imgur.com/PxtEzu3.png" />
+                        </div>
+                    </center>
+                </div>
+                <div class="col-md-4">
+                    <div style=" margin-top:1.5em;">
+                        <span style="font-size:1.5em;">@Html.Raw(Model.Customer.ApplicationUser.Email)</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn" style="width:2em; height:2em"></button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a asp-area="" asp-controller="Customers" asp-action="Profile">Profile</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Billing">Billing</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Settings">Settings</a>
+                            <a asp-area="" asp-controller="Identity/Account/" asp-action="Login">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
