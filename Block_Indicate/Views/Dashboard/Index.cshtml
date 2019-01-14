@@ -147,7 +147,7 @@
         </div>
         <div class="col-md-2" style="height:10px; padding:0px">
             <div style="padding-top:1.5em; float:left">
-                <span><span style="font-size:1.5em">USD: </span><span style="font-size:1.2em">$@Html.Raw((Model.TotalBTC * Convert.ToDecimal(Model.CurrentPrices["btc"])).ToString("0.##"))</span></span>
+                <span><span style="font-size:1.5em">USD: </span><span style="font-size:1.2em">$@Html.Raw((Model.TotalBTC * Model.BalanceDetails[0].LastPrice).ToString("0.##"))</span></span>
             </div>
         </div>
         <div class="col-md-2" style="height:10px">

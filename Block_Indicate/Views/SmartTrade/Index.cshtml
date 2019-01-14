@@ -1,7 +1,231 @@
-﻿
+﻿@model Block_Indicate.Models.SmartTradeViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<style>
+    .custom-height-slider {
+        height: 75px;
+    }
 
+    .dx-field .dx-slider {
+        flex: 1;
+    }
+
+    .dropbtn {
+        background-color: #ffffff;
+        background-image: url("https://pngimage.net/wp-content/uploads/2018/06/logo-menu-png-6.png");
+        background-size: cover;
+        color: white;
+        padding: 1em;
+        padding-bottom: 1.5em;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        padding-right: 2em;
+        outline: none;
+    }
+
+        .dropbtn:hover, .dropbtn:focus {
+            background-image: url("https://i.imgur.com/ZfcE5MY.png");
+        }
+
+    .dropdown {
+        padding-top: 0.9em;
+        padding-right: 2em;
+        float: right;
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #282741;
+        border-radius: 20px;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        right: 0;
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            font-size: 1.2em;
+            color: #999999;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        color: white;
+    }
+
+    .show {
+        display: block;
+    }
+
+    #dashdivST {
+        border-radius: 10px;
+        background-color: #dedede;
+        width: 100%;
+        height: 300px;
+    }
+
+    #h3padd {
+        padding-top: 1em;
+        padding-left: 1em;
+    }
+
+    li {
+        font-size: 16px;
+        padding-bottom: 1em;
+        color: #747474
+    }
+
+    #align-center {
+        display: flex;
+        align-items: center;
+    }
+</style>
+<div style="height:5em; position: absolute; top:0; right:0; left:17.8em; border-bottom:2px solid black">
+    <div class="row">
+        <div class="col-md-2" style="height:10px">
+            <div style="padding-top:1.5em">
+                <span style="padding-left:2em"><span style="font-size:1.5em">BTC: </span><span style="font-size:1.2em">@Html.Raw(Model.EstimatedBTC.ToString("0.######"))</span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px; padding:0px">
+            <div style="padding-top:1.5em; float:left">
+                <span><span style="font-size:1.5em">USD: </span><span style="font-size:1.2em">$@Html.Raw((Model.EstimatedBTC * Convert.ToDecimal(Model.CurrentPrices["btc"])).ToString("0.##"))</span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px">
+            <div style="margin-top:1.5em; float:right">
+                <span><strong style="font-size:1.5em;">BTC</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:1.5em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["btc"])</strong></span></span>
+            </div>
+        </div>
+        <div class="col-md-2" style="height:10px">
+            <div style=" margin-top:1.5em">
+                <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Ethereum</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
+            </div>
+        </div>
+        <div style="padding:0px; height:10px" class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <center>
+                        <div style=" padding-top:0.5em">
+                            <img style="height:55px; width:55px; float:right;" src="https://i.imgur.com/PxtEzu3.png" />
+                        </div>
+                    </center>
+                </div>
+                <div class="col-md-4">
+                    <div style=" margin-top:1.5em;">
+                        <span style="font-size:1.5em;">@Html.Raw(Model.Customer.ApplicationUser.Email)</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn" style="width:2em; height:2em"></button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a asp-area="" asp-controller="Customers" asp-action="Profile">Profile</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Billing">Billing</a>
+                            <a asp-area="" asp-controller="Customers" asp-action="Settings">Settings</a>
+                            <a asp-area="" asp-controller="Identity/Account/" asp-action="Login">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="CreateSmartTrade">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row" style="padding-top:3em">
+        <div class="col-md-4">
+            <div id="dashdivST">
+                <h3 id="h3padd">Buy</h3>
+                <hr />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h3 style="padding-left:2em">Token</h3>
+                        </div>
+                        <div class="col-md-5" style="padding:0px">
+                            <div style="float:left; padding-top:1.1em;">
+                                <select style="width:100%; height:2.6em; border-radius:0.3em;" asp-for="Trade.Symbol" asp-items="ViewBag.Tokens">
+                                    <option disabled selected>--- SELECT ---</option>
+                                </select>
+                                <span asp-validation-for="Trade.Symbol" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                </div>
+                <center>
+                    <div class="form-group">
+                        <input asp-for="Trade.BuyPrice" class="form-control" placeholder="0.0000" style="width:80%; height:3em" />
+                        <span asp-validation-for="Trade.BuyPrice" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding:0px">
+                            <h4 style="float:right; padding:0px">Limit</h4>
+                        </div>
+                        <div class="col-md-4" style="padding:0px">
+                            <div id="form-space" style="padding:0px">
+                                <label class="switch">
+                                    @Html.CheckBoxFor(model => model.Trade.IsMarket)
+                                    <div class="slider round">
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding:0px">
+                            <h4 style="float:left; padding:0px">Market</h4>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div id="dashdivST">
+                <h3 id="h3padd">Stop Loss</h3>
+                <hr />
+
+            </div>
+        <div class="col-md-4">
+            <div id="dashdivST">
+                <h3 id="h3padd">Take Profit</h3>
+                <hr />
+            </div>
+        </div>
+    </div>
+    <br />
+    <center>
+        <div class="form-group">
+            <input style="width:30%" type="submit" value="Create Smart Trade" class="btn btn-primary" />
+        </div>
+    </center>
+
+</form>
+
+
+
+
+
+<script>
+    function formatLabel(value) {
+        return value + "%";
+    }
+
+    function slider_valueChanged(data) {
+        $("#slider-value").dxNumberBox("instance").option("value", data.value);
+    }
+
+    function numberBox_valueChanged(data) {
+        $("#handler-slider").dxSlider("instance").option("value", data.value);
+    }
+</script>

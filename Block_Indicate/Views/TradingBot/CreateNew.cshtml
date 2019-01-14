@@ -1,5 +1,4 @@
 ﻿@model Block_Indicate.Models.TradeBotViewModel
-
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -27,7 +26,7 @@
         height: 120px;
         display: block;
     }
-    
+
     td {
         width: 10%;
     }
@@ -52,7 +51,7 @@
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                         <div class="form-group">
                                             <h3>Unique Name</h3>
-                                            <input asp-for="TradeBot.Name" class="form-control" placeholder="Enter a name..."/>
+                                            <input asp-for="TradeBot.Name" class="form-control" placeholder="Enter a name..." />
                                             <span asp-validation-for="TradeBot.Name" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
@@ -71,22 +70,22 @@
                                         </div>
                                         <div class="form-group">
                                             <h3>All Markets</h3>
-                                            <input asp-for="TradeBot.AllMarkets" class="form-control" value="@(ViewBag.AllMarkets)"/>
+                                            <input asp-for="TradeBot.AllMarkets" class="form-control" value="@(ViewBag.AllMarkets)" />
                                             <span asp-validation-for="TradeBot.AllMarkets" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <h3>Allocated Bitcoin</h3>
-                                            <input asp-for="TradeBot.AllocatedBitcoin" class="form-control" placeholder="1.50" value="@(ViewBag.TotalBTC)"/>
+                                            <input asp-for="TradeBot.AllocatedBitcoin" class="form-control" placeholder="1.50" value="@(ViewBag.TotalBTC)" />
                                             <span asp-validation-for="TradeBot.AllocatedBitcoin" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <h3>Percent Take Profit</h3>
-                                            <input asp-for="TradeBot.PercentTakeProfit" class="form-control"  placeholder="2.00" value="2.00"/>
+                                            <input asp-for="TradeBot.PercentTakeProfit" class="form-control" placeholder="2.00" value="2.00" />
                                             <span asp-validation-for="TradeBot.PercentTakeProfit" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <h3>Percent Stop Loss</h3>
-                                            <input asp-for="TradeBot.PercentStopLoss" class="form-control" placeholder="-2.00" value="-2.00"/>
+                                            <input asp-for="TradeBot.PercentStopLoss" class="form-control" placeholder="-2.00" value="-2.00" />
                                             <span asp-validation-for="TradeBot.PercentStopLoss" class="text-danger"></span>
                                         </div>
                                         <div style="padding-bottom:2em" class="form-group">

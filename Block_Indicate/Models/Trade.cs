@@ -49,6 +49,7 @@ namespace Block_Indicate.Models
         public bool IsTrailingStopLoss { get; set; }
         public bool IsTakeProfit { get; set; }
         public bool IsStopLoss { get; set; }
+        public bool IsMarket { get; set; }
         public string TimeActive { get; set; }
         public string TimeToCompletion { get; set; }
         public DateTime StartDate { get; set; }

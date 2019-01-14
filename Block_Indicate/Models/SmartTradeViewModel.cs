@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Block_Indicate.Controllers
+namespace Block_Indicate.Models
 {
     public class SmartTradeViewModel
     {
@@ -13,5 +13,7 @@ namespace Block_Indicate.Controllers
         public decimal EstimatedBTC { get; set; }
         public List<Tuple<string, decimal>> BinanceBalances { get; set; }
         public Dictionary<string, double> CurrentPrices { get; set; }
+        public List<Trade> Trades { get; set; }
+        public Trade Trade { get; set; }
     }
 }
