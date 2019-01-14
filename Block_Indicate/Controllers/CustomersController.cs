@@ -100,7 +100,7 @@ namespace Block_Indicate.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,PhoneNumber")] Customer customer)
+        public IActionResult Create([Bind("Id,FirstName,LastName,PhoneNumber")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -108,10 +108,25 @@ namespace Block_Indicate.Controllers
                 customer.UserId = userId;
                 customer.CompletedSignUp = true;
                 db.Add(customer);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index","Dashboard");
+                db.SaveChanges();
+                db.Customers.Where(c => c.UserId == userId).Single();
+                Notification notification = new Notification();
+                notification.CustomerId = customer.Id;
+                db.Notifications.Add(notification);
+                db.SaveChanges();
+                return RedirectToAction("CreateNotifications");
             }
             ViewData["UserId"] = new SelectList(db.ApplicationUsers, "Id", "Id", customer.UserId);
+            return RedirectToAction("Index", "Dashboard");
+        }
+        public IActionResult CreateNotifications()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Customer customer = db.Customers.Where(c => c.UserId == userId).Single();
+            Notification notification = new Notification();
+            notification.CustomerId = customer.Id;
+            db.Notifications.Add(notification);
+            db.SaveChanges();
             return RedirectToAction("Index", "Dashboard");
         }
 

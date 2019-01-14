@@ -90,20 +90,14 @@ namespace Block_Indicate.Class
                             }
                             System.Threading.Thread.Sleep(10000);
                         }
-                        var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-                        await botClient.SendTextMessageAsync(
-                            chatId: 542294321,
-                            text: "Shut Down Bot " + tradeBot.Name
-                        );
+                        Notify notify = new Notify();
+                        await notify.TelegramAsync(customerId, "Shut Down Bot " + tradeBot.Name);
                     }
                 }
                 catch (Exception e)
                 {
-                    var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-                    await botClient.SendTextMessageAsync(
-                        chatId: 542294321,
-                        text: "Run Bot Failure : Scan for New Trade\nException: " + e
-                    );
+                    Notify notify = new Notify();
+                    await notify.TelegramAsync(customerId, "Run Bot Failure : Scan for New Trade\nException: " + e);
                 }
             });
         }

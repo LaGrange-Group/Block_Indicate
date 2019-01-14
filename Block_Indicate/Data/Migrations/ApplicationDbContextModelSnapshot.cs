@@ -19,6 +19,29 @@ namespace Block_Indicate.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Block_Indicate.Models.AccountPerformance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("BTC")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<int>("CustomerId");
+
+                    b.Property<DateTime>("DateUpdated");
+
+                    b.Property<decimal>("USD")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("AccountPerformances");
+                });
+
             modelBuilder.Entity("Block_Indicate.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -124,6 +147,47 @@ namespace Block_Indicate.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FourHourDojis");
+                });
+
+            modelBuilder.Entity("Block_Indicate.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CustomerId");
+
+                    b.Property<bool>("EmailBotTradeBuys");
+
+                    b.Property<bool>("EmailBotTradeConclusions");
+
+                    b.Property<bool>("EmailDoubleVolume");
+
+                    b.Property<bool>("EmailFourHourDojis");
+
+                    b.Property<bool>("EmailSiteUpdates");
+
+                    b.Property<bool>("EmailSmartTradeConclusions");
+
+                    b.Property<bool>("TelegramBotTradeBuys");
+
+                    b.Property<bool>("TelegramBotTradeConclusions");
+
+                    b.Property<int?>("TelegramChatId");
+
+                    b.Property<bool>("TelegramDoubleVolume");
+
+                    b.Property<bool>("TelegramFourHourDojis");
+
+                    b.Property<bool>("TelegramSiteUpdates");
+
+                    b.Property<bool>("TelegramSmartTradeConclusions");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Block_Indicate.Models.Result", b =>
@@ -578,11 +642,27 @@ namespace Block_Indicate.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
+            modelBuilder.Entity("Block_Indicate.Models.AccountPerformance", b =>
+                {
+                    b.HasOne("Block_Indicate.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Block_Indicate.Models.Customer", b =>
                 {
                     b.HasOne("Block_Indicate.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Block_Indicate.Models.Notification", b =>
+                {
+                    b.HasOne("Block_Indicate.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Block_Indicate.Models.Result", b =>

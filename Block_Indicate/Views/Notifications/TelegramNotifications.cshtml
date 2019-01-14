@@ -1,0 +1,199 @@
+﻿@model Block_Indicate.Models.Notification
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<link href="~/lib/bootstrap/dist/css/Global.css" rel="stylesheet" />
+<style>
+    h1{
+        color:white;
+    }
+    h2{
+        color:white;
+    }
+    h3{
+        color:white;
+    }
+    h4{
+        color:white;
+    }
+</style>
+<div class="container" style="padding-top:100px; width:30%; height:200px">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="modal-content" style="background-color:#282741">
+            <div class="modal-header">
+                <center>
+                    <h2 style="padding-left:1em;" id="h2-modal">Telegram Notifications</h2>
+                </center>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="dashdiv" style=" width:100%; height:auto; background-color:#282741; padding:1em">
+                                <div style="padding-left:2em; padding-right:2em" class="col-md-12">
+                                    @if (Model.TelegramChatId != null)
+                                    {
+                                        <form asp-action="TelegramNotifications">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <h3 id="h3-modal">Double Volume</h3>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div id="form-space">
+                                                            <label class="switch">
+                                                                @Html.CheckBoxFor(model => model.EmailDoubleVolume)
+                                                                <div class="slider round">
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <h3 id="h3-modal">Four Hour Doji's</h3>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div id="form-space">
+                                                            <label class="switch">
+                                                                @Html.CheckBoxFor(model => model.TelegramFourHourDojis)
+                                                                <div class="slider round">
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <h3 id="h3-modal">Smart Trade Results</h3>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div id="form-space">
+                                                            <label class="switch">
+                                                                @Html.CheckBoxFor(model => model.TelegramSmartTradeConclusions)
+                                                                <div class="slider round">
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <h3 id="h3-modal">Trade Bot Buys</h3>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div id="form-space">
+                                                            <label class="switch">
+                                                                @Html.CheckBoxFor(model => model.TelegramBotTradeBuys)
+                                                                <div class="slider round">
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <h3 id="h3-modal">Trade Bot Results</h3>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div id="form-space">
+                                                            <label class="switch">
+                                                                @Html.CheckBoxFor(model => model.TelegramBotTradeConclusions)
+                                                                <div class="slider round">
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="padding-bottom:1em">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <h3 id="h3-modal">Website Updates</h3>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div id="form-space">
+                                                            <label class="switch">
+                                                                @Html.CheckBoxFor(model => model.TelegramSiteUpdates)
+                                                                <div class="slider round">
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.HiddenFor(model => model.Id)
+                                            @Html.HiddenFor(model => model.CustomerId)
+                                            <center>
+                                                <div class="form-group">
+                                                    <input style="width:75%" type="submit" value="Confirm" class="btn btn-success" />
+                                                </div>
+                                            </center>
+
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <center>
+                                            <div>
+                                                <h1>Oops!</h1>
+                                                <h3>It seems you have not connected to your Telegram yet.</h3>
+                                            </div>
+                                            <div style="padding:1em">
+                                                <h4> If you do not have a chat id, click the link below to generate one.</h4>
+                                            </div>
+                                            <div style="padding-bottom:1em;">
+                                                <a href="https://telegram.me/myidbot" target="_blank" class="btn btn-primary">Generate Id</a>
+                                            </div>
+                                        </center>
+                                        <form asp-action="TelegramNotifications">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div style="padding-right:1em">
+                                                            <h3 id="h3-modal">Chat Id</h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div id="form-space" style="padding-left:0px; width:7.4em">
+                                                            <input asp-for="TelegramChatId" class="form-control" placeholder="chat id"/>
+                                                            <span asp-validation-for="TelegramChatId" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @Html.HiddenFor(model => model.Id)
+                                            @Html.HiddenFor(model => model.CustomerId)
+                                            <center>
+                                                <div class="form-group">
+                                                    <input style="width:75%" type="submit" value="Confirm" class="btn btn-success" />
+                                                </div>
+                                            </center>
+
+                                        </form>
+                                    }
+
+                                </div>
+                                @*542294321*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,138 @@
+﻿@model Block_Indicate.Models.Notification
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<link href="~/lib/bootstrap/dist/css/Global.css" rel="stylesheet" />
+<div class="container" style="padding-top:100px; width:30%; height:200px">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="modal-content" style="background-color:#282741">
+            <div class="modal-header">
+                <center>
+                    <h2 style="padding-left:1em;" id="h2-modal">Email Notifications</h2>
+                </center>
+            </div>
+            <div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="dashdiv" style=" width:100%; height:auto; background-color:#282741; padding:1em">
+                                <div style="padding-left:2em; padding-right:2em" class="col-md-12">
+                                    <form asp-action="EmailNotification">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <h3 id="h3-modal">Double Volume</h3>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div id="form-space">
+                                                        <label class="switch">
+                                                            @Html.CheckBoxFor(model => model.EmailDoubleVolume)
+                                                            <div class="slider round">
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <h3 id="h3-modal">Four Hour Doji's</h3>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div id="form-space">
+                                                        <label class="switch">
+                                                            @Html.CheckBoxFor(model => model.EmailFourHourDojis)
+                                                            <div class="slider round">
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <h3 id="h3-modal">Smart Trade Results</h3>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div id="form-space">
+                                                        <label class="switch">
+                                                            @Html.CheckBoxFor(model => model.EmailSmartTradeConclusions)
+                                                            <div class="slider round">
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <h3 id="h3-modal">Trade Bot Buys</h3>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div id="form-space">
+                                                        <label class="switch">
+                                                            @Html.CheckBoxFor(model => model.EmailBotTradeBuys)
+                                                            <div class="slider round">
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <h3 id="h3-modal">Trade Bot Results</h3>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div id="form-space">
+                                                        <label class="switch">
+                                                            @Html.CheckBoxFor(model => model.EmailBotTradeConclusions)
+                                                            <div class="slider round">
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding-bottom:1em">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <h3 id="h3-modal">Website Updates</h3>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div id="form-space">
+                                                        <label class="switch">
+                                                            @Html.CheckBoxFor(model => model.EmailSiteUpdates)
+                                                            <div class="slider round">
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <center>
+                                            <div class="form-group">
+                                                <input style="width:75%" type="submit" value="Confirm" class="btn btn-success" />
+                                            </div>
+                                        </center>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>

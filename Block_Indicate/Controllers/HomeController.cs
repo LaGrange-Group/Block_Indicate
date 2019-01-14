@@ -24,7 +24,7 @@ namespace Block_Indicate.Controllers
             return RedirectToAction("Login", "/Identity/Account");
         }
 
-        public IActionResult IsCustomer()
+        public async Task<IActionResult> IsCustomer()
         {
             try
             {
@@ -33,6 +33,7 @@ namespace Block_Indicate.Controllers
                 if (customer.CompletedSignUp == true)
                 {
                     ExchangeApiKeys.Set(_context, userId);
+                    await UpdateBalaces();
                     return RedirectToAction("Index", "Dashboard");
                 }
                 return RedirectToAction("Create", "Customers");
@@ -42,7 +43,19 @@ namespace Block_Indicate.Controllers
                 return RedirectToAction("Create", "Customers");
             }
         }
-
+        public async Task UpdateBalaces()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Customer customer = _context.Customers.Where(c => c.UserId == userId).Single();
+            DateTime lastDay = _context.AccountPerformances.Where(a => a.CustomerId == customer.Id).Select(a => a.DateUpdated).Single();
+            lastDay = lastDay.AddDays(1);
+            DateTime currentTime = DateTime.Now;
+            if (currentTime > lastDay)
+            {
+                //Get current account balances
+                //await _context.SaveChangesAsync();
+            }
+        }
 
         public IActionResult About()
         {

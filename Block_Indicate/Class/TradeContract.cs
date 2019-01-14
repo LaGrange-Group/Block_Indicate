@@ -43,11 +43,8 @@ namespace Block_Indicate.Class
                 CalculateBaseCurrency calculateBaseCurrency = new CalculateBaseCurrency();
                 decimal freeBaseCurrency = calculateBaseCurrency.GetFreeBitcoin(tradeBot);
                 trade.StartingBitcoinAmount = freeBaseCurrency;
-                var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-                botClient.SendTextMessageAsync(
-                  chatId: 542294321,
-                  text: "Creating New Trade for " + market.Symbol
-                );
+                Notify notify = new Notify();
+                notify.Telegram(customerId, "Creating New Trade for " + market.Symbol);
 
                 BinanceClient.SetDefaultOptions(new BinanceClientOptions()
                 {
@@ -67,10 +64,7 @@ namespace Block_Indicate.Class
                     var marketBuy = client.PlaceOrder(market.Symbol, OrderSide.Buy, OrderType.Market, trade.Amount);
                     if (marketBuy.Success)
                     {
-                        botClient.SendTextMessageAsync(
-                          chatId: 542294321,
-                          text: "Successfuly Bought " + marketBuy.Data.Symbol + " At Price " + marketBuy.Data.Fills[0].Price.ToString()
-                        );
+                        notify.Telegram(customerId, "Successfuly Bought " + marketBuy.Data.Symbol + " At Price " + marketBuy.Data.Fills[0].Price.ToString());
 
                         // Set Trade Row Buy Price
                         trade.BuyPrice = marketBuy.Data.Fills[0].Price;
@@ -84,30 +78,25 @@ namespace Block_Indicate.Class
                         if (sellLimitOrder.Success)
                         {
                             trade.OrderId = sellLimitOrder.Data.OrderId;
-                            botClient.SendTextMessageAsync(
-                              chatId: 542294321,
-                              text: "Successfuly set take profit for " + trade.Amount.ToString() + " " + market.Symbol + " at price " + sellPrice.ToString()
-                            );
+                            notify.Telegram(customerId, "Successfuly set take profit for " + trade.Amount.ToString() + " " + market.Symbol + " at price " + sellPrice.ToString());
                             trade.TakeProfit = sellPrice;
                             ScanForConclusion(tradeBot, market, decimalCount, trade, customer);
+                        }
+                        else
+                        {
+                            notify.Telegram(customerId, "Trade Set Take Profit Failure : " + marketBuy.Error);
                         }
                     }
                     else
                     {
-                        botClient.SendTextMessageAsync(
-                            chatId: 542294321,
-                            text: "Trade Buy Market Failure : " + marketBuy.Error
-                        );
+                        notify.Telegram(customerId, "Trade Buy Market Failure : " + marketBuy.Error);
                     }
                 }
             }
             catch (Exception e)
             {
-                var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-                botClient.SendTextMessageAsync(
-                    chatId: 542294321,
-                    text: "Trade Contract Failure : Scan For Buy + Set Take Profit\nException: " + e
-                );
+                Notify notify = new Notify();
+                notify.Telegram(customerId, "Trade Contract Failure : Scan For Buy + Set Take Profit\nException: " + e);
             }
         }
 
@@ -121,11 +110,8 @@ namespace Block_Indicate.Class
                 trade.StopLoss = stopLossPrice;
                 AddTrade(trade);
                 bool active = true;
-                var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-                botClient.SendTextMessageAsync(
-                    chatId: 542294321,
-                    text: "Scanning for Stop Loss at: " + stopLossPrice.ToString()
-                );
+                Notify notify = new Notify();
+                notify.Telegram(customer.Id, "Scanning for Stop Loss at: " + stopLossPrice.ToString());
                 using (var client = new BinanceSocketClient())
                 {
                     var successKline = client.SubscribeToKlineStream(market.Symbol, KlineInterval.OneMinute, (data) =>
@@ -153,10 +139,7 @@ namespace Block_Indicate.Class
                                 if (orderStatus.Data.Status == OrderStatus.Filled || orderStatus.Data.Status == OrderStatus.Canceled)
                                 {
                                     decimal percentGain = (orderStatus.Data.Price - trade.BuyPrice) / trade.BuyPrice * 100;
-                                    botClient.SendTextMessageAsync(
-                                        chatId: 542294321,
-                                        text: "--Trade Concluded-- \nCoin: " + market.Symbol + "\nGain: + " + decimal.Round(percentGain, 2) + " %"
-                                    );
+                                    notify.Telegram(customer.Id, "--Trade Concluded-- \nCoin: " + market.Symbol + "\nGain: + " + decimal.Round(percentGain, 2) + " %");
                                     trade.SellPrice = orderStatus.Data.Price;
                                     UpdateTrade(trade);
                                     active = false;
@@ -170,11 +153,8 @@ namespace Block_Indicate.Class
             }
             catch (Exception e)
             {
-                var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-                botClient.SendTextMessageAsync(
-                    chatId: 542294321,
-                    text: "Trade Contract Failure : Scan For Conclusion\nException: " + e
-                );
+                Notify notify = new Notify();
+                notify.Telegram(customer.Id, "Trade Contract Failure : Scan For Conclusion\nException: " + e);
             }
         }
         private void UpdateTrade(Trade trade)

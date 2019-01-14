@@ -3,6 +3,9 @@
     ViewData["Title"] = "Dashboard";
 }
 @*position: absolute; top:0; right:0; left:0; float:right*@
+<script src="~/js/Chart/highcharts.js"></script>
+<script src="~/js/Chart/exporting.js"></script>
+<script src="~/js/Chart/export-data.js"></script>
 <style>
 
     .dropbtn {
@@ -261,54 +264,36 @@
             @if (Model.BinanceBalances != null)
             {
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="row">
-                            <div class="col-md-6">
+                    <div class="col-md-6">
+                        <div class="row" style="padding-left:1em">
+                            <div class="col-md-4">
                                 <div style="padding-top:4em; padding-left:2em">
                                     <h2>Binance</h2>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div style="padding-top:3.5em">
                                     <img style="height:100px; width:100px" src="https://i.imgur.com/wolEHmr.png" />
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        @*<div style="border-right:1px solid white; height:10em; padding-top:1em" />*@
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h3>Asset</h3>
-                            </div>
-                            <div class="col-md-4">
-                                <h3>Amount</h3>
-                            </div>
-                            <div class="col-md-4">
-                                <h3>Percent</h3>
+                            <div class="col-md-5">
+                                <div style="float:left; padding:0px">
+                                    <div id="container-assets" style="min-width: 310px; height: 190px; width: 190px; margin: 0 auto; background-color:#dedede; padding-top:0.7em; padding-right:7em; float:left;"></div>
+                                </div>
                             </div>
                         </div>
-                        <table>
-                            <tr>
-                                @*<th>Asset</th>
-            <th>Amount</th>
-            <th>Percent of Wallet</th>*@
-                            </tr>
-                            @foreach (var row in Model.BinanceBalances)
-                            {
-                                if (row.Item1 != "EstimatedBTC" && row.Item1 != "SBTC")
-                                {
-                                    <tr>
-                                        <td>@Html.Raw(row.Item1)</td>
-                                        <td>@Html.Raw(row.Item2)</td>
-                                    </tr>
-                                }
-                            }
-                        </table>
                     </div>
-                    <div class="col-md-4">
-
+                    <div class="col-md-6">
+                        <div id="container-performance" style="min-width: 310px; height: 200px; width:auto; margin: 0 auto; padding-right:2em"></div>
                     </div>
+                </div>
+            }
+            else
+            {
+                <div style="padding-top:4em">
+                    <center>
+                        <h1 style="color:#ededed; font-size:4em">Binance Integration</h1>
+                    </center>
                 </div>
             }
         </div>
@@ -465,3 +450,132 @@
         </div>
     </div>
 </div>
+
+<script>
+    Highcharts.setOptions({
+        colors: ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#808000', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#46f0f0', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+    });
+    Highcharts.chart('container-assets', {
+        chart: {
+            backgroundColor: "#dedede",
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            margin: [0, 0, 0, 0],
+            spacingTop: 0,
+            spacingBottom: 0,
+            spacingLeft: 0,
+            spacingRight: 0
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br>Amount:{point.amount}'
+        },
+        plotOptions: {
+            pie: {
+                size:'100%',
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        exporting: {
+            enabled: false
+        }, credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Percent',
+            colorByPoint: true,
+            data: [
+            @for (int i = 0; i < Model.BinanceBalances.Count; i++)
+            {
+                if (i == 0)
+                {
+                    <text>
+                {
+                    name: '@Model.BinanceBalances[i].Item1',
+                    y: @Model.BinanceBalances[i].Item2,
+                    amount: "0.0045",
+                    sliced: true,
+                    selected: true
+                },
+                    </text>
+                }else if (i < Model.BinanceBalances.Count - 1)
+                {
+                    <text>
+                {
+                    name: '@Model.BinanceBalances[i].Item1',
+                    y: @Model.BinanceBalances[i].Item2,
+                    amount: "0.0045"
+                },
+                    </text>
+                }
+                else
+                {
+                    <text>
+                {
+                    name: '@Model.BinanceBalances[i].Item1',
+                    y: @Model.BinanceBalances[i].Item2,
+                    amount: "0.0045"
+                }]
+                    </text>
+                }
+            }
+        }]
+    });
+</script>
+
+<script>
+    Highcharts.setOptions({
+        colors: ['#7cb5ec', '#434348']
+    });
+    Highcharts.chart('container-performance', {
+        chart: {
+            backgroundColor: "#dedede",
+            type: 'line'
+        },
+        title: {
+            text: 'Performance'
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        yAxis: {
+            labels: {
+                format: '{value:.2f}'
+            },
+            title: {
+                enabled: false
+            }
+
+        },
+        exporting: {
+            enabled: false
+        }, credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'BTC',
+            data: [0.003345, 0.003045, 0.002945, 0.002545]
+        },
+            {
+            name: 'USD',
+            data: [13.82, 12.60, 11.25, 8.60]
+        }]
+    });
+</script>

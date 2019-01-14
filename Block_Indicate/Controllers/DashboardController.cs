@@ -24,11 +24,15 @@ namespace Block_Indicate.Controllers
         {
             try
             {
-                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
-                NavPrice navPrice = new NavPrice();
-                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+                Task<List<Tuple<string, decimal>>> binanceBalancesAsync = null;
+                if (customer.ConnectedBinance == true)
+                {
+                    binanceBalancesAsync = ExchangeApiKeys.GetAccountBalancesAsync("Binance");
+                }
+                NavPrice navPrice = new NavPrice();
+                Task<Dictionary<string, double>> currentPricesAsync = navPrice.CurrentPricesAsync();
                 DateTime a = DateTime.Now;
                 DateTime prevDay = new DateTime(a.Year, a.Month, a.Day - 1, a.Hour, a.Minute, 0);
                 DashboardViewModel dashboard = new DashboardViewModel();

@@ -46,11 +46,13 @@
             justify-content: center;
             align-items: center;
         }
+
         .sidebar-nav > .sidebar-brand-mini {
             height: 45px;
             font-size: 15px;
             line-height: 20px;
         }
+
             .sidebar-nav > .sidebar-brand-mini a {
                 color: #999999;
             }
@@ -59,6 +61,44 @@
                     color: #fff;
                     background: none;
                 }
+
+        .notifyTelegram {
+            background-color: #282741;
+            float: right;
+            background-image: url("https://i.imgur.com/2XQdnOD.png");
+            background-size: cover;
+            color: white;
+            padding: 0.001em;
+            padding-bottom: 2em;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            padding-right: 2em;
+            outline: none;
+        }
+
+            .notifyTelegram:hover, .notifyTelegram:focus {
+                background-image: url("https://i.imgur.com/BlhsoAw.png");
+            }
+
+        .notifyEmail {
+            background-color: #282741;
+            float: left;
+            background-image: url("https://i.imgur.com/jccdIUN.png");
+            background-size: cover;
+            color: white;
+            padding: 0.001em;
+            padding-bottom: 2em;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            padding-right: 2em;
+            outline: none;
+        }
+
+            .notifyEmail:hover, .notifyEmail:focus {
+                background-image: url("https://i.imgur.com/gavngxR.png");
+            }
     </style>
 </head>
 <body>
@@ -79,10 +119,27 @@
                     </div>
                     <div class="col-md-8" style="padding:0px;">
                         <div style="float:left">
-                            <h3 style="color:white" class="cn">Block Indicate</h3>
+                            <h3 style="color:white;" class="cn">Block Indicate</h3>
                         </div>
                     </div>
                 </div>
+                <div class="row" style="padding-top:1em; padding-bottom:1em;">
+                    <div class="col-md-6">
+                        <div>
+                            <center>
+                                <button type="submit" class="notifyTelegram" id="Telegram_Notify"></button>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <center>
+                                <button type="submit" class="notifyEmail" id="Email_Notify"></button>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+
                 <li class="sidebar-brand">
                     <div class="row">
                         <div class="col-md-4" style="padding:0px">
@@ -223,6 +280,42 @@
 
     @RenderSection("Scripts", required: false)
 </body>
+
+<div class="modal fade" id="myTelegramNotifications" role="dialog" data-url='@Url.Action("TelegramNotifications", "Notifications")'></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#Telegram_Notify').click(function () {
+
+            var url = $('#myTelegramNotifications').data('url');
+            $.get(url, function (data) {
+
+                $("#myTelegramNotifications").html(data);
+                $("#myTelegramNotifications").modal('show');
+            });
+        });
+
+    });
+</script>
+
+<div class="modal fade" id="myEmailNotifications" role="dialog" data-url='@Url.Action("EmailNotifications", "Notifications")'></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#Email_Notify').click(function () {
+
+            var url = $('#myEmailNotifications').data('url');
+            $.get(url, function (data) {
+
+                $("#myEmailNotifications").html(data);
+                $("#myEmailNotifications").modal('show');
+            });
+        });
+
+    });
+</script>
 <script>
     /* When the user clicks on the button,
     toggle between hiding and showing the dropdown content */

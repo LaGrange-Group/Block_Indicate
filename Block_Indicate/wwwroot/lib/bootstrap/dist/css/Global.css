@@ -1,0 +1,98 @@
+﻿body {
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+    .switch input {
+        display: none;
+    }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
+
+/* include generated hidden field here */
+input[type="checkbox"]:checked + input[type="hidden"] + .slider,
+input[type="checkbox"]:checked + .slider {
+    background-color: #2196F3;
+}
+
+/* include generated hidden field here */
+input[type="checkbox"]:focus + input[type="hidden"] + .slider,
+input[type="checkbox"]:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+/* include generated hidden field here */
+input[type="checkbox"]:checked + input[type="hidden"] + .slider:before,
+input[type="checkbox"]:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+#dashdiv {
+    border-radius: 10px;
+    background-color: #dedede;
+    width: 100%;
+    height: 220px;
+}
+<style >
+div {
+    padding: 0px;
+}
+
+li {
+    font-size: 16px;
+    padding-bottom: 1em;
+}
+
+#align-center {
+    display: flex;
+    align-items: center;
+}
+
+#h2-modal {
+    color: white;
+}
+
+#h3-modal {
+    color: white;
+    float: right;
+}
+
+#form-space {
+    padding-top: 1.1em;
+    padding-left: 1em;
+}
+/*#F2F2F2*/
+</style >

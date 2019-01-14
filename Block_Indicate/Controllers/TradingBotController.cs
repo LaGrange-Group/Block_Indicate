@@ -89,11 +89,8 @@ namespace Block_Indicate.Controllers
             db.TradeBots.Add(tradeBot);
             db.SaveChanges();
             //RunBot runBot = new RunBot(tradeBot, tradeBot.CustomerId);
-            var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-            botClient.SendTextMessageAsync(
-              chatId: 542294321,
-              text: "Created New Bot " + tradeBot.Name
-            );
+            Notify notify = new Notify();
+            notify.Telegram(customer.Id, "Created New Bot " + tradeBot.Name);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> ActiveTrades()
@@ -109,7 +106,7 @@ namespace Block_Indicate.Controllers
                 TradeBotViewModel tradeView = new TradeBotViewModel();
                 tradeView.Customer = customer;
                 UpdateTrades updateTrades = new UpdateTrades();
-                updateTrades.Update(customer.Id);
+                await updateTrades.UpdateAsync(customer.Id);
                 tradeView.Trades = db.Trades.Where(t => t.Active == true).ToList();
                 tradeView.BinanceBalances = await binanceBalancesAsync;
                 tradeView.EstimatedBTC = tradeView.BinanceBalances.Where(b => b.Item1 == "EstimatedBTC").Select(b => b.Item2).Single();
@@ -179,11 +176,10 @@ namespace Block_Indicate.Controllers
         private async Task StartExistingBot(TradeBot tradeBot)
         {
             RunBot runBot = new RunBot(tradeBot, tradeBot.CustomerId);
-            var botClient = new TelegramBotClient("742635812:AAHHN_UwKgvCWSo6H2fRTehdi2gb_Un55EA");
-            await botClient.SendTextMessageAsync(
-              chatId: 542294321,
-              text: "Started Bot " + tradeBot.Name
-            );
+            Notify notify = new Notify();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Customer customer = db.Customers.Include(c => c.ApplicationUser).Where(c => c.UserId == userId).Single();
+            await notify.TelegramAsync(customer.Id, "Started Bot " + tradeBot.Name);
         }
 
         public async Task<IActionResult> SellMarket(int tradeId)
@@ -200,6 +196,11 @@ namespace Block_Indicate.Controllers
                 await db.SaveChangesAsync();
             }
             return RedirectToAction("ActiveTrades");
+        }
+
+        public IActionResult BarChart()
+        {
+            return View();
         }
 
     }
