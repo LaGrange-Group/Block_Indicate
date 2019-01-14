@@ -152,12 +152,12 @@
         </div>
         <div class="col-md-2" style="height:10px">
             <div style="margin-top:1.5em; float:right">
-                <span><strong style="font-size:1.5em;">BTC</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:1.5em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["btc"])</strong></span></span>
+                <span><strong style="font-size:1.5em;">BTC</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Bitcoin</span><span style="font-size:1.5em; color:green"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.BalanceDetails[0].LastPrice.ToString("0.#########"))</strong></span></span>
             </div>
         </div>
         <div class="col-md-2" style="height:10px">
             <div style=" margin-top:1.5em">
-                <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Ethereum</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.CurrentPrices["eth"])</strong></span></span>
+                <span style=" vertical-align:middle"><strong style="font-size:1.5em;">ETH</strong><span style="font-size:1.5em"> / </span><span style="font-size:1.5em">Ethereum</span><span style="font-size:1.5em; color:deepskyblue"><strong>&nbsp;&nbsp;&nbsp;&nbsp;$@Html.Raw(Model.BalanceDetails[1].LastPrice.ToString("0.#########"))</strong></span></span>
             </div>
         </div>
         <div style="padding:0px; height:10px" class="col-md-4">
@@ -189,10 +189,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 <div class="row" style="padding-top:2em">
     <div class="col-md-3">
         <div id="dashdiv">
@@ -247,12 +243,15 @@
     </div>
     <div class="col-md-3">
         <div id="dashdiv" style="vertical-align:middle">
-            <h4 style="padding-top:1em; padding-left:1em">Performance</h4>
-            <hr />
-            <center>
-                <h3 style="padding-top:0.15em">Success: <span style="color:green">@Math.Round(Model.TradePerformance.DVBSuccess, 2) %</span></h3>
+            <h4 style="padding-top:1em; padding-left:1em">Bot Performance</h4>
+            <hr style="padding:0px" />
+            <center style="padding:0px">
+                @*<h3 style="padding-top:0.15em">Success: <span style="color:green">@Math.Round(Model.TradePerformance.DVBSuccess, 2) %</span></h3>
                 <h3>No Trade: <span style="color:yellow">@Math.Round(Model.TradePerformance.DVBNoTrade, 2) %</span></h3>
-                <h3>Fail: <span style="color:red">@Math.Round(Model.TradePerformance.DVBFail, 2) %</span></h3>
+                <h3>Fail: <span style="color:red">@Math.Round(Model.TradePerformance.DVBFail, 2) %</span></h3>*@
+                <div style="padding:0px;  padding-bottom:4em;">
+                    <div id="container-botperformance" style="min-width: 310px; height: 170px; width: 170px; margin: 0 auto; background-color:transparent; padding-bottom:4em"></div>
+                </div>
             </center>
         </div>
     </div>
@@ -261,7 +260,7 @@
 <div class="row">
     <div class="col-md-8">
         <div id="dashdiv" style=" width:100%; height:200px; background-color:#dedede">
-            @if (Model.BinanceBalances != null)
+            @if (Model.BalanceDetails != null)
             {
                 <div class="row">
                     <div class="col-md-6">
@@ -278,7 +277,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div style="float:left; padding:0px">
-                                    <div id="container-assets" style="min-width: 310px; height: 190px; width: 190px; margin: 0 auto; background-color:#dedede; padding-top:0.7em; padding-right:7em; float:left;"></div>
+                                    <div id="container-assets" style="min-width: 310px; height: 190px; width: 190px; margin: 0 auto; background-color:transparent; padding-top:0.7em; padding-right:7em; float:left;"></div>
                                 </div>
                             </div>
                         </div>
@@ -453,11 +452,11 @@
 
 <script>
     Highcharts.setOptions({
-        colors: ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#808000', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#46f0f0', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+        colors: ['#f0f7b4', '#4363d8', '#ffe119', '#911eb4', '#fabebe', '#f032e6', '#bcf60c', '#f58231', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#46f0f0', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
     });
     Highcharts.chart('container-assets', {
         chart: {
-            backgroundColor: "#dedede",
+            backgroundColor: null,
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false,
@@ -472,7 +471,7 @@
             text: ''
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br>Amount:{point.amount}'
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br>Amount:{point.amount}</b> <br>Bitcoin Value:{point.bitcoinvalue} <br>USD Value:{point.usdvalue}'
         },
         plotOptions: {
             pie: {
@@ -497,40 +496,111 @@
             name: 'Percent',
             colorByPoint: true,
             data: [
-            @for (int i = 0; i < Model.BinanceBalances.Count; i++)
+            @for (int i = 2; i < Model.BalanceDetails.Count - 1; i++)
             {
-                if (i == 0)
-                {
-                    <text>
-                {
-                    name: '@Model.BinanceBalances[i].Item1',
-                    y: @Model.BinanceBalances[i].Item2,
-                    amount: "0.0045",
-                    sliced: true,
-                    selected: true
-                },
-                    </text>
-                }else if (i < Model.BinanceBalances.Count - 1)
-                {
-                    <text>
-                {
-                    name: '@Model.BinanceBalances[i].Item1',
-                    y: @Model.BinanceBalances[i].Item2,
-                    amount: "0.0045"
-                },
-                    </text>
-                }
-                else
-                {
-                    <text>
-                {
-                    name: '@Model.BinanceBalances[i].Item1',
-                    y: @Model.BinanceBalances[i].Item2,
-                    amount: "0.0045"
-                }]
-                    </text>
+
+                    if (i == 2)
+                    {
+                        <text>
+                        {
+                            name: '@Model.BalanceDetails[i].Name',
+                            y: @Model.BalanceDetails[i].BitcoinValue,
+                            amount: @Model.BalanceDetails[i].Amount,
+                            bitcoinvalue: @Model.BalanceDetails[i].Amount,
+                            usdvalue: @Model.BalanceDetails[i].USDValue,
+                            sliced: true,
+                            selected: true
+                        },
+                        </text>
+                    }else if (i < Model.BalanceDetails.Count - 2)
+                    {
+                        <text>
+                        {
+                            name: '@Model.BalanceDetails[i].Name',
+                            y: @Model.BalanceDetails[i].BitcoinValue,
+                            amount: @Model.BalanceDetails[i].Amount,
+                            bitcoinvalue: @Model.BalanceDetails[i].Amount,
+                            usdvalue: @Model.BalanceDetails[i].USDValue
+                        },
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                        {
+                            name: '@Model.BalanceDetails[i].Name',
+                            y: @Model.BalanceDetails[i].BitcoinValue,
+                            amount: @Model.BalanceDetails[i].Amount,
+                            bitcoinvalue: @Model.BalanceDetails[i].Amount,
+                            usdvalue: @Model.BalanceDetails[i].USDValue
+                        }]
+                        </text>
+                    }
+                
+            }
+        }]
+    });
+</script>
+
+<script>
+    Highcharts.setOptions({
+        colors: ['#3cb44b', '#ffff00', '#e6194b']
+    });
+    Highcharts.chart('container-botperformance', {
+        chart: {
+            backgroundColor: null,
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            margin: [10, 0, 10, 0],
+            spacingTop: 10,
+            spacingBottom: 0,
+            spacingLeft: 0,
+            spacingRight: 0
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                size:'100%',
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
                 }
             }
+        },
+        exporting: {
+            enabled: false
+        }, credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Percent',
+            colorByPoint: true,
+            data: [{
+                name: 'Success',
+                y: @Math.Round(Model.TradePerformance.DVBSuccess, 2),
+                sliced: true,
+                selected: true
+            },
+            {
+                name: 'No Trade',
+                y: @Math.Round(Model.TradePerformance.DVBNoTrade, 2)
+            },
+            {
+                name: 'Fail',
+                y: @Math.Round(Model.TradePerformance.DVBFail, 2)
+            }]
         }]
     });
 </script>

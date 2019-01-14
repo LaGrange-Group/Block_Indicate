@@ -41,6 +41,14 @@ namespace Block_Indicate.Models
         public decimal CurrentPercentageResult { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal FinalPercentageResult { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal TrailingStopLossPercent { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal TrailingTakeProfitPercent { get; set; }
+        public bool IsTrailingTakeProfit { get; set; }
+        public bool IsTrailingStopLoss { get; set; }
+        public bool IsTakeProfit { get; set; }
+        public bool IsStopLoss { get; set; }
         public string TimeActive { get; set; }
         public string TimeToCompletion { get; set; }
         public DateTime StartDate { get; set; }

@@ -33,7 +33,7 @@ namespace Block_Indicate.Controllers
                 if (customer.CompletedSignUp == true)
                 {
                     ExchangeApiKeys.Set(_context, userId);
-                    await UpdateBalaces();
+                    //await UpdateBalaces();
                     return RedirectToAction("Index", "Dashboard");
                 }
                 return RedirectToAction("Create", "Customers");

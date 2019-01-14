@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Block_Indicate.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +9,9 @@ namespace Block_Indicate.Models
     public class DashboardViewModel
     {
         public Customer Customer { get; set; }
-        public decimal TotalBTC { get; set; }
         public int ActiveBots { get; set; }
         public int BotsTotal { get; set; }
-        public List<Tuple<string, decimal>> BinanceBalances { get; set; }
+        public List<BalanceDetails> BalanceDetails { get; set; }
         public List<Tuple<string, decimal>> HuobiBalances { get; set; }
         public Dictionary<string, double> CurrentPrices { get; set; }
         public List<ValidDoubleVolumeBinance> ValidDoubleVolumesBinance { get; set; }
@@ -19,7 +19,7 @@ namespace Block_Indicate.Models
         public TradePerformance TradePerformance { get; set; }
         public bool BinanceConnected { get; set; }
         public bool HuobiConnected { get; set; }
-        public decimal BitcoinPrice { get; set; }
-        public decimal EthereumPrice { get; set; }
+        public decimal TotalBTC { get; set; }
+        public decimal ETHPrice { get; set; }
     }
 }

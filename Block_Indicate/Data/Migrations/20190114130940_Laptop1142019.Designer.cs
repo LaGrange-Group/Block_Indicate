@@ -4,14 +4,16 @@ using Block_Indicate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Block_Indicate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190114130940_Laptop1142019")]
+    partial class Laptop1142019
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,14 +284,6 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("FinalPercentageResult")
                         .HasColumnType("decimal(28, 18)");
 
-                    b.Property<bool>("IsStopLoss");
-
-                    b.Property<bool>("IsTakeProfit");
-
-                    b.Property<bool>("IsTrailingStopLoss");
-
-                    b.Property<bool>("IsTrailingTakeProfit");
-
                     b.Property<string>("Name");
 
                     b.Property<long?>("OrderId");
@@ -315,12 +309,6 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<string>("TimeActive");
 
                     b.Property<string>("TimeToCompletion");
-
-                    b.Property<decimal>("TrailingStopLossPercent")
-                        .HasColumnType("decimal(28, 18)");
-
-                    b.Property<decimal>("TrailingTakeProfitPercent")
-                        .HasColumnType("decimal(28, 18)");
 
                     b.Property<string>("Type");
 

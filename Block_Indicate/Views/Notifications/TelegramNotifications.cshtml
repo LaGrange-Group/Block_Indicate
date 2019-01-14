@@ -4,16 +4,7 @@
 *@
 <link href="~/lib/bootstrap/dist/css/Global.css" rel="stylesheet" />
 <style>
-    h1{
-        color:white;
-    }
-    h2{
-        color:white;
-    }
-    h3{
-        color:white;
-    }
-    h4{
+    #white-texth{
         color:white;
     }
 </style>
@@ -44,7 +35,7 @@
                                                     <div class="col-md-5">
                                                         <div id="form-space">
                                                             <label class="switch">
-                                                                @Html.CheckBoxFor(model => model.EmailDoubleVolume)
+                                                                @Html.CheckBoxFor(model => model.TelegramDoubleVolume)
                                                                 <div class="slider round">
                                                                 </div>
                                                             </label>
@@ -146,11 +137,11 @@
                                     {
                                         <center>
                                             <div>
-                                                <h1>Oops!</h1>
-                                                <h3>It seems you have not connected to your Telegram yet.</h3>
+                                                <h1 style="color:white">Oops!</h1>
+                                                <h3 id="h3-modal">It seems you have not connected to your Telegram yet.</h3>
                                             </div>
                                             <div style="padding:1em">
-                                                <h4> If you do not have a chat id, click the link below to generate one.</h4>
+                                                <h4 id="white-texth"> If you do not have a chat id, click the link below to generate one.</h4>
                                             </div>
                                             <div style="padding-bottom:1em;">
                                                 <a href="https://telegram.me/myidbot" target="_blank" class="btn btn-primary">Generate Id</a>
