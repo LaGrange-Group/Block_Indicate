@@ -58,7 +58,7 @@ namespace Block_Indicate.Class
                     decimal askPrice = Convert.ToDecimal(client.GetBookPrice(market.Symbol).Data.AskPrice.ToString("0.##############"));
                     int decimalCount = BitConverter.GetBytes(decimal.GetBits(askPrice)[3])[2];
                     CalculateAmount calculateAmount = new CalculateAmount();
-                    trade.Amount = calculateAmount.GetAmount(market, askPrice, freeBaseCurrency);
+                    trade.Amount = calculateAmount.GetAmount(market.Symbol, askPrice, freeBaseCurrency);
 
                     // Place Market Order
                     var marketBuy = client.PlaceOrder(market.Symbol, OrderSide.Buy, OrderType.Market, trade.Amount);

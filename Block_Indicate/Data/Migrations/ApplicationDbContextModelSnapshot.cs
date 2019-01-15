@@ -249,6 +249,9 @@ namespace Block_Indicate.Data.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<decimal>("AllocatedBitcoin")
+                        .HasColumnType("decimal(28, 18)");
+
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(28, 18)");
 
@@ -282,6 +285,8 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("FinalPercentageResult")
                         .HasColumnType("decimal(28, 18)");
 
+                    b.Property<bool>("IsMarket");
+
                     b.Property<bool>("IsStopLoss");
 
                     b.Property<bool>("IsTakeProfit");
@@ -307,9 +312,15 @@ namespace Block_Indicate.Data.Migrations
                     b.Property<decimal>("StopLoss")
                         .HasColumnType("decimal(28, 18)");
 
+                    b.Property<decimal>("StopLossPercent")
+                        .HasColumnType("decimal(28, 18)");
+
                     b.Property<string>("Symbol");
 
                     b.Property<decimal>("TakeProfit")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("TakeProfitPercent")
                         .HasColumnType("decimal(28, 18)");
 
                     b.Property<string>("TimeActive");
@@ -320,6 +331,9 @@ namespace Block_Indicate.Data.Migrations
                         .HasColumnType("decimal(28, 18)");
 
                     b.Property<decimal>("TrailingTakeProfitPercent")
+                        .HasColumnType("decimal(28, 18)");
+
+                    b.Property<decimal>("TrailingTakeStopLoss")
                         .HasColumnType("decimal(28, 18)");
 
                     b.Property<string>("Type");

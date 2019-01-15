@@ -163,5 +163,42 @@ namespace Block_Indicate.Class
                 return false;
             }
         }
+
+        public async Task<BuildTrade> LimitAsync(BuildTrade build)
+        {
+            BinanceClient.SetDefaultOptions(new BinanceClientOptions()
+            {
+                ApiCredentials = new ApiCredentials(build.Customer.BinanceApiKey, build.Customer.BinanceApiSecret),
+                LogVerbosity = LogVerbosity.Debug,
+                LogWriters = new List<TextWriter> { Console.Out }
+            });
+            using (var client = new BinanceClient())
+            {
+                var sellLimit = await client.PlaceOrderAsync(build.Trade.Symbol, OrderSide.Sell, OrderType.Limit, build.Trade.Amount, null, build.Trade.TakeProfit, TimeInForce.GoodTillCancel);
+                if (sellLimit.Success)
+                {
+                    build.Trade.OrderId = sellLimit.Data.OrderId;
+                    
+                    return build;
+                }
+            }
+            // bool
+            return build;
+        }
+
+        public BuildTrade MarketNoOrder(BuildTrade build)
+        {
+            using (var client = new BinanceClient())
+            {
+                var sellMarket = client.PlaceOrder(build.Trade.Symbol, OrderSide.Sell, OrderType.Market, build.Trade.Amount);
+                if (sellMarket.Success)
+                {
+                    build.Trade.SellPrice = sellMarket.Data.Fills[0].Price;
+                    build.Trade.Active = false;
+                    return build;
+                }
+            }
+            return build;
+        }
     }
 }

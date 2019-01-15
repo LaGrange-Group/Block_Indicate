@@ -45,6 +45,14 @@ namespace Block_Indicate.Models
         public decimal TrailingStopLossPercent { get; set; }
         [Column(TypeName = "decimal(28, 18)")]
         public decimal TrailingTakeProfitPercent { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal TrailingTakeStopLoss { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal TakeProfitPercent { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal StopLossPercent { get; set; }
+        [Column(TypeName = "decimal(28, 18)")]
+        public decimal AllocatedBitcoin { get; set; }
         public bool IsTrailingTakeProfit { get; set; }
         public bool IsTrailingStopLoss { get; set; }
         public bool IsTakeProfit { get; set; }

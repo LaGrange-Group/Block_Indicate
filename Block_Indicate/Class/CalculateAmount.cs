@@ -10,14 +10,15 @@ namespace Block_Indicate.Class
 {
     public class CalculateAmount
     {
-        public decimal GetAmount(Result market, decimal askPrice, decimal freeBaseCurrency, int attempt = 0)
+        public decimal GetAmount(string symbol, decimal askPrice, decimal freeBaseCurrency, int attempt = 0)
         {
             decimal amount = 0;
             if (attempt < 5)
             {
                 using (var client = new BinanceClient())
                 {
-                    var orderBook = client.GetRecentTrades(market.Symbol, 20);
+
+                    var orderBook = client.GetRecentTrades(symbol, 20);
                     if (orderBook.Success)
                     {
                         List<BinanceRecentTrade> trades = orderBook.Data.ToList();
@@ -27,7 +28,7 @@ namespace Block_Indicate.Class
                     else
                     {
                         System.Threading.Thread.Sleep(30000);
-                        return GetAmount(market, askPrice, freeBaseCurrency, attempt++);
+                        return GetAmount(symbol, askPrice, freeBaseCurrency, attempt++);
                     }
                 }
                 return amount;
@@ -35,6 +36,39 @@ namespace Block_Indicate.Class
             else
             {
                 return amount;
+            }
+        }
+        public async Task<BuildTrade> GetAmountAsync(BuildTrade build = null, int attempt = 0)
+        {
+            if (attempt < 5)
+            {
+                using (var client = new BinanceClient())
+                {
+                    var getAsk = await client.GetBookPriceAsync(build.Trade.Symbol);
+                    if (getAsk.Success)
+                    {
+                        build.AskPrice = Convert.ToDecimal(getAsk.Data.AskPrice.ToString("0.##############"));
+                        build.AskDecimalLength = BitConverter.GetBytes(decimal.GetBits(build.AskPrice)[3])[2];
+
+                        var orderBook = await client.GetRecentTradesAsync(build.Trade.Symbol, 20);
+                        if (orderBook.Success)
+                        {
+                            List<BinanceRecentTrade> trades = orderBook.Data.ToList();
+                            int decimalCount = GetLargestDecimalPlace(trades);
+                            build.Trade.Amount = Decimal.Round(build.Trade.AllocatedBitcoin / build.AskPrice, decimalCount);
+                        }
+                        else
+                        {
+                            System.Threading.Thread.Sleep(30000);
+                            return await GetAmountAsync(build, attempt++);
+                        }
+                    }
+                }
+                return build;
+            }
+            else
+            {
+                return build;
             }
         }
 

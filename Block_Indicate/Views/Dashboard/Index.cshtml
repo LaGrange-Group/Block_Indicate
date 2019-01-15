@@ -452,7 +452,7 @@
 
 <script>
     Highcharts.setOptions({
-        colors: ['#f0f7b4', '#4363d8', '#ffe119', '#911eb4', '#fabebe', '#f032e6', '#bcf60c', '#f58231', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#46f0f0', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+        colors: ['#f0f7b4', '#96fffb', '#ffe119', '#911eb4', '#fabebe', '#4363d8', '#bcf60c', '#f58231', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#46f0f0', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
     });
     Highcharts.chart('container-assets', {
         chart: {
@@ -471,7 +471,7 @@
             text: ''
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br>Amount:{point.amount}</b> <br>Bitcoin Value:{point.bitcoinvalue} <br>USD Value:{point.usdvalue}'
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b> <br>Amount:{point.amount}</b> <br>Bitcoin Value:{point.bitcoinvalue} <br>USD Value:${point.usdvalue}'
         },
         plotOptions: {
             pie: {
@@ -519,7 +519,7 @@
                             name: '@Model.BalanceDetails[i].Name',
                             y: @Model.BalanceDetails[i].BitcoinValue,
                             amount: @Model.BalanceDetails[i].Amount,
-                            bitcoinvalue: @Model.BalanceDetails[i].Amount,
+                            bitcoinvalue: @Model.BalanceDetails[i].BitcoinValue,
                             usdvalue: @Model.BalanceDetails[i].USDValue
                         },
                         </text>
@@ -531,7 +531,7 @@
                             name: '@Model.BalanceDetails[i].Name',
                             y: @Model.BalanceDetails[i].BitcoinValue,
                             amount: @Model.BalanceDetails[i].Amount,
-                            bitcoinvalue: @Model.BalanceDetails[i].Amount,
+                            bitcoinvalue: @Model.BalanceDetails[i].BitcoinValue,
                             usdvalue: @Model.BalanceDetails[i].USDValue
                         }]
                         </text>
@@ -641,11 +641,11 @@
         },
         series: [{
             name: 'BTC',
-            data: [0.003345, 0.003045, 0.002945, 0.002545]
+            data: [0.003345, 0.003045, 0.002945, 0.002545, 0.005255]
         },
             {
             name: 'USD',
-            data: [13.82, 12.60, 11.25, 8.60]
+            data: [13.82, 12.60, 11.25, 8.60, 19.08]
         }]
     });
 </script>
